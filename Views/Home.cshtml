@@ -1,4 +1,5 @@
 ﻿@using NC.WebEngine.Core.Content;
+@using NC.WebEngine.ViewModels;
 @{
     Layout = "Theme.cshtml";
 }
@@ -13,9 +14,10 @@
     <div class="bg-image bg-fixed"><img src="assets/img/photos/agency_bg01.jpg" alt=""></div>
 
     <div class="v-center container-fluid container-custom">
-        <h1 class="display-1 mb-40">We are agency...</h1>
+        <h1 class="display-1 mb-40">We are agency {{model.Counter}}</h1>
         <div class="btn-group" data-local-scroll>
-            <a href="#portfolio" class="btn btn-primary">Our portfolio</a>
+            <a class="btn btn-primary"
+               v-on:click="Increment">Our portfolio</a>
             <a href="#about" class="btn btn-secondary">About Us</a>
         </div>
     </div>

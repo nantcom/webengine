@@ -1,5 +1,6 @@
 using NC.WebEngine.Core;
 using System.Reflection;
+using System.Text.Json;
 
 namespace NC.WebEngine
 {
@@ -11,6 +12,10 @@ namespace NC.WebEngine
 
             builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
             builder.Services.AddRazorTemplating();
+            builder.Services.ConfigureHttpJsonOptions(opt =>
+            {
+                opt.SerializerOptions.PropertyNamingPolicy = null;
+            });
             
             Program.RegisterServices(builder.Services);
 

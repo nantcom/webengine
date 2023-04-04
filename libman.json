@@ -19,6 +19,20 @@
         "css/bootstrap.min.css",
         "css/bootstrap.css"
       ]
+    },
+    {
+      "library": "vue@3.2.47",
+      "destination": "wwwroot/js/vue",
+      "files": [
+        "vue.runtime.global.js",
+        "vue.runtime.global.min.js",
+        "vue.runtime.global.prod.js",
+        "vue.runtime.global.prod.min.js",
+        "vue.global.js",
+        "vue.global.min.js",
+        "vue.global.prod.js",
+        "vue.global.prod.min.js"
+      ]
     }
   ]
 }

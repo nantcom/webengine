@@ -1,7 +1,10 @@
-﻿using NC.WebEngine.Core.Data;
+﻿using HtmlAgilityPack;
+using NC.WebEngine.Core.Data;
+using NC.WebEngine.Core.VueSync;
 using Razor.Templating.Core;
 using System;
 using System.IO.Pipelines;
+using System.Reflection;
 
 namespace NC.WebEngine.Core.Content
 {
@@ -17,6 +20,10 @@ namespace NC.WebEngine.Core.Content
         /// </summary>
         public List<ContentPage> StandardPages { get; set; } = new();
 
+        public Dictionary<string, string> PageModels { get; set; } = new();
+
+        private List<IPostProcessor> _postProcessors;
+
         public void Register(WebApplication app)
         {
             app.Configuration.Bind("ContentModule", this);
@@ -24,6 +31,11 @@ namespace NC.WebEngine.Core.Content
             app.MapGet("/", (DatabaseService db, HttpContext ctx ) => this.RenderView( db, ctx, "/"));
 
             app.MapGet("/{*url}", this.RenderView);
+
+            _postProcessors = Assembly.GetExecutingAssembly().GetTypes()
+                                .Where( t => typeof(IPostProcessor).IsAssignableFrom(t) && t.IsClass)
+                                .Select( t => (IPostProcessor)Activator.CreateInstance(t)! )
+                                .ToList();
         }
 
         private string ConvertPathToUrl( string path)
@@ -88,19 +100,38 @@ namespace NC.WebEngine.Core.Content
 
             pageToRender.ContentPartNames = parts.Select(p => p.Name).ToList();
 
+            var vueModelTypeName = this.PageModels.ContainsKey(url) ? this.PageModels[url] : string.Empty;
+            IVueModel? vueModelInstance = null;
+            var vueModelType = Type.GetType(vueModelTypeName);
+            if (vueModelType != null )
+            {
+                vueModelInstance = (IVueModel?)Activator.CreateInstance(vueModelType);
+                vueModelInstance!.OnCreated(ctx);
+            }
+
             var viewModel = new ContentRenderModel()
             {
                 ContentPage = pageToRender,
-                ContentParts = parts.ToList()
+                ContentParts = parts.ToList(),
+                VueModel = vueModelInstance,
             };
 
             var html = await RazorTemplateEngine.RenderAsync(pageToRender.View, viewModel);
 
+            HtmlDocument document = new HtmlDocument();
+            document.LoadHtml(html);
 
+            foreach (var processor in _postProcessors)
+            {
+                processor.Process(viewModel, document);
+            }
 
             ctx.Response.ContentType = "text/html";
-            await ctx.Response.WriteAsync(html);
+
+            document.Save(ctx.Response.Body);
+
             await ctx.Response.CompleteAsync();
         }
+
     }
 }
