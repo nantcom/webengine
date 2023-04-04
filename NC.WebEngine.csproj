@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+		<CompilerGeneratedFilesOutputPath>Generated</CompilerGeneratedFilesOutputPath>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Folder Include="wwwroot\theme\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="7.0.4" />
+		<PackageReference Include="Razor.Templating.Core" Version="1.8.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\CoreSharp\CoreSharp.SQLite\CoreSharp.SQLite.Generator\NC.SQLite.SourceGen.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+		<ProjectReference Include="..\CoreSharp\CoreSharp.SQLite\CoreSharp.SQLite\NC.SQLite.csproj" OutputItemType="Analyzer" />
+	</ItemGroup>
+	<ItemGroup>
+		<!-- Exclude the output of source generators from the compilation -->
+		<Compile Remove="$(CompilerGeneratedFilesOutputPath)/**/*.cs" />
+	</ItemGroup>
+
+</Project>
