@@ -1,5 +1,7 @@
 ﻿using NC.WebEngine.Core.Data;
 using Razor.Templating.Core;
+using System;
+using System.IO.Pipelines;
 
 namespace NC.WebEngine.Core.Content
 {
@@ -24,8 +26,42 @@ namespace NC.WebEngine.Core.Content
             app.MapGet("/{*url}", this.RenderView);
         }
 
+        private string ConvertPathToUrl( string path)
+        {
+            var wwwroot = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+            return path.Replace(wwwroot, "").Replace("\\", "/");
+        }
+
+        private string ConvertUrlToPath(string url)
+        {
+            return Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", url.Replace("/", "\\"));
+        }
+
+        private async Task<bool> StaticFiles( HttpContext ctx, string url )
+        {
+            var path = this.ConvertUrlToPath(url);
+            if (File.Exists(path))
+            {
+                ctx.Response.ContentType = MimeTypes.GetMimeType(url);
+
+                using var fs = File.OpenRead(path);
+                await fs.CopyToAsync(ctx.Response.Body);
+                await ctx.Response.CompleteAsync();
+
+                return true;
+            }
+
+            return false;
+        }
+
         private async Task RenderView( DatabaseService db, HttpContext ctx, string url )
         {
+            var staticServed = await this.StaticFiles(ctx, url);
+            if (staticServed)
+            {
+                return;
+            }
+
             var pageToRender = db.Connection.LinqTo<ContentPage>()
                             .Where(x => x.Url == url)
                             .Result()
