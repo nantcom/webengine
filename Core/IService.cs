@@ -2,6 +2,6 @@
 {
     internal interface IService
     {
-        void Register(IServiceCollection services);
+        void RegisterBuilder(WebApplicationBuilder builder);
     }
 }

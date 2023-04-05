@@ -75,7 +75,7 @@ namespace NC.WebEngine.Core.VueSync
                                   Key = $"{type.FullName}-{m.Name}",
                                   VueSyncModelType = type,
                                   Delegate = (object instance, object parameter) => m.Invoke(instance, new [] { parameter }),
-                                  MethodParameter = m.GetParameters()[0].GetType(),
+                                  MethodParameter = m.GetParameters()[0].ParameterType,
                               };
 
             foreach (var method in callableMethods)

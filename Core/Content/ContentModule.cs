@@ -28,7 +28,7 @@ namespace NC.WebEngine.Core.Content
         {
             app.Configuration.Bind("ContentModule", this);
 
-            app.MapGet("/", (DatabaseService db, HttpContext ctx ) => this.RenderView( db, ctx, "/"));
+            app.MapGet("/", (ContentService contentService, HttpContext ctx) => this.RenderView(contentService, ctx, "/"));
 
             app.MapGet("/{*url}", this.RenderView);
 
@@ -66,7 +66,7 @@ namespace NC.WebEngine.Core.Content
             return false;
         }
 
-        private async Task RenderView( DatabaseService db, HttpContext ctx, string url )
+        private async Task RenderView(ContentService contentService, HttpContext ctx, string url )
         {
             var staticServed = await this.StaticFiles(ctx, url);
             if (staticServed)
@@ -74,56 +74,21 @@ namespace NC.WebEngine.Core.Content
                 return;
             }
 
-            var pageToRender = db.Connection.LinqTo<ContentPage>()
-                            .Where(x => x.Url == url)
-                            .Result()
-                            .FirstOrDefault();
-
-            if ( pageToRender == null)
-            {
-                pageToRender = this.StandardPages.FirstOrDefault(p => p.Url == url);
-                if (pageToRender != null)
-                {
-                    db.Connection.Insert(pageToRender);
-                }
-            }
-
-            if (pageToRender == null)
+            var contentRendererModel = contentService.GetContentRenderModel(ctx, url);
+            if (contentRendererModel == ContentRenderModel.NotFound )
             {
                 ctx.Response.StatusCode = 404;
                 return;
             }
 
-            var parts = db.Connection.LinqTo<ContentPart>()
-                            .Where(cp => cp.ContentPageId == pageToRender.Id)
-                            .Result();
-
-            pageToRender.ContentPartNames = parts.Select(p => p.Name).ToList();
-
-            var vueModelTypeName = this.PageModels.ContainsKey(url) ? this.PageModels[url] : string.Empty;
-            IVueModel? vueModelInstance = null;
-            var vueModelType = Type.GetType(vueModelTypeName);
-            if (vueModelType != null )
-            {
-                vueModelInstance = (IVueModel?)Activator.CreateInstance(vueModelType);
-                vueModelInstance!.OnCreated(ctx);
-            }
-
-            var viewModel = new ContentRenderModel()
-            {
-                ContentPage = pageToRender,
-                ContentParts = parts.ToList(),
-                VueModel = vueModelInstance,
-            };
-
-            var html = await RazorTemplateEngine.RenderAsync(pageToRender.View, viewModel);
+            var html = await RazorTemplateEngine.RenderAsync(contentRendererModel.ContentPage.View, contentRendererModel);
 
             HtmlDocument document = new HtmlDocument();
             document.LoadHtml(html);
 
             foreach (var processor in _postProcessors)
             {
-                processor.Process(viewModel, document);
+                processor.Process(contentRendererModel, document);
             }
 
             ctx.Response.ContentType = "text/html";

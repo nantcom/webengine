@@ -11,6 +11,8 @@ namespace NC.WebEngine.Core.Content.PostProcessors
     {
         Dictionary<Type, string> _syncInfoCache = new();
 
+        private List<IVueSyncMixins> _mixIns;
+
         private string CreateSyncInfo( IVueModel model )
         {
             string syncInfo;
@@ -44,6 +46,14 @@ namespace NC.WebEngine.Core.Content.PostProcessors
             return syncInfo;
         }
 
+        public InjectVueSync()
+        {
+            _mixIns = Assembly.GetExecutingAssembly().GetTypes()
+                                .Where(t => typeof(IVueSyncMixins).IsAssignableFrom(t) && t.IsClass)
+                                .Select(t => (IVueSyncMixins)Activator.CreateInstance(t)!)
+                                .ToList();
+        }
+
         public void Process(ContentRenderModel renderModel, HtmlDocument document)
         {
             var body = document.DocumentNode.QuerySelector("body");
@@ -54,13 +64,24 @@ namespace NC.WebEngine.Core.Content.PostProcessors
 
                 body.AppendChild(HtmlNode.CreateNode("<script src=\"/js/ncweb/vuesync.js\"></script>"));
 
+                var includedMixIns = _mixIns.Where(mi => mi.WillInclude(renderModel)).ToList();
+
+                foreach (var item in includedMixIns.SelectMany( m => m.JsFiles ))
+                {
+                    body.AppendChild(HtmlNode.CreateNode($"<script src=\"{item}\"></script>"));
+                }
+
+                var httpContext = renderModel.HttpContext;
+
                 body.AppendChild(HtmlNode.CreateNode(
                 @$"<script>
                     var syncInfo = {this.CreateSyncInfo(renderModel.VueModel)};
                     syncInfo.model = {JsonSerializer.Serialize((object)renderModel.VueModel)};
-                    Vue.createApp(
-                        window.ncvuesync.generateVueSync(syncInfo)
-                    ).mount('#ncwapp');
+                    vueModel = window.ncvuesync.generateVueSync(syncInfo);
+                    
+                    {string.Join( ";\r\n", includedMixIns.Select( mi => mi.CallMixins("vueModel")) )}
+
+                    Vue.createApp(vueModel).mount('#ncwapp');
                 </script>"));
             }
 

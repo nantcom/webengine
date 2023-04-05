@@ -8,11 +8,11 @@ namespace NC.WebEngine.Core.Data
 
         public SQLiteConnection Connection => _connection;
 
-        public void Register(IServiceCollection services)
+        public void RegisterBuilder(WebApplicationBuilder builder)
         {
             _connection = new SQLiteConnection("SiteData.sqlite");
 
-            services.AddSingleton<DatabaseService>(this);
+            builder.Services.AddSingleton<DatabaseService>(this);
         }
 
     }

@@ -17,7 +17,7 @@ namespace NC.WebEngine
                 opt.SerializerOptions.PropertyNamingPolicy = null;
             });
             
-            Program.RegisterServices(builder.Services);
+            Program.RegisterBuilder(builder);
 
             var app = builder.Build();
 
@@ -44,7 +44,7 @@ namespace NC.WebEngine
             }
         }
 
-        private static void RegisterServices(IServiceCollection services)
+        private static void RegisterBuilder(WebApplicationBuilder builder)
         {
             var modules = Assembly.GetExecutingAssembly()
                             .GetTypes()
@@ -53,7 +53,7 @@ namespace NC.WebEngine
             foreach (var module in modules)
             {
                 var instance = (IService?)Activator.CreateInstance(module);
-                instance!.Register(services);
+                instance!.RegisterBuilder(builder);
             }
         }
     }

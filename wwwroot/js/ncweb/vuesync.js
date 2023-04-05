@@ -2,6 +2,34 @@ if (window.ncvuesync == null) {
     window.ncvuesync = {};
 }
 
+window.ncvuesync.callServer = async function (typeName, method, parameterArray) {
+
+    try {
+        var response = await fetch(`/__vuesync/${typeName}/call/${method}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(parameterArray),
+        });
+
+        var data = await response.json();
+
+        return {
+            data: data,
+            isSuccess: true
+        };
+    }
+    catch (error) {
+
+        return {
+            data: {},
+            isSuccess: false
+        };
+    }
+}
+
+
 // idea:
 // - generate proxy to call server method from list intead of generate by server
 // - store JSON locally then
