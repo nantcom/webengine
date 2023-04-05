@@ -8,6 +8,6 @@ namespace NC.WebEngine.Core.VueSync
 
         string[] JsFiles { get; }
 
-        string CallMixins(string vueSyncVariableName);
+        string CallMixins(ContentRenderModel renderModel, string vueSyncVariableName);
     }
 }

@@ -72,5 +72,22 @@ namespace NC.WebEngine.Core.Content
                 VueModel = vueModelInstance,
             };
         }
+
+        /// <summary>
+        /// Saves the content part
+        /// </summary>
+        public ContentPart SaveContentPart( ContentPart p )
+        {
+            if (p.ContentPageId == 0)
+            {
+                throw new InvalidOperationException("Require ContentPageId");
+            }
+
+            //TODO: Render HTML if block content
+            //TODO: Sanitize the HTML
+            _db!.Connection.Upsert( p );
+
+            return p;
+        }
     }
 }

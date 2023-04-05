@@ -7,9 +7,9 @@ namespace NC.WebEngine.Core.Editor
     {
         public string[] JsFiles => new[] { "/js/ncweb/editor.js" };
 
-        public string CallMixins(string vueSyncVariableName)
+        public string CallMixins(ContentRenderModel renderModel, string vueSyncVariableName)
         {
-            return $"window.nceditor?.editormixin?.({vueSyncVariableName});";
+            return $"window.nceditor?.editormixin?.({vueSyncVariableName}, {renderModel.ContentPage.Id});";
         }
 
         public bool WillInclude(ContentRenderModel renderModel)

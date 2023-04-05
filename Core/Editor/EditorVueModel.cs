@@ -6,22 +6,12 @@ namespace NC.WebEngine.Core.Editor
 {
     public class EditorVueModel : IVueModel
     {
-        public class SavePartParams
-        {
-            [JsonPropertyName("content")]
-            public string Content { get; set; }
-
-            [JsonPropertyName("partName")]
-            public string PartName { get; set; }
-
-            [JsonPropertyName("pageUrl")]
-            public string PageUrl { get; set; }
-        }
+        private ContentService _contentService;
 
         [VueCallableMethod]
-        public void SavePart(SavePartParams p)
+        public ContentPart SavePart(ContentPart p)
         {
-
+            return _contentService.SaveContentPart(p);
         }
 
         public void OnCreated(HttpContext ctx)
@@ -30,6 +20,7 @@ namespace NC.WebEngine.Core.Editor
 
         public void OnPostback(HttpContext ctx)
         {
+            _contentService = ctx.RequestServices.GetRequiredService<ContentService>();
         }
     }
 }

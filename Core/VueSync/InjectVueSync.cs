@@ -79,7 +79,7 @@ namespace NC.WebEngine.Core.Content.PostProcessors
                     syncInfo.model = {JsonSerializer.Serialize((object)renderModel.VueModel)};
                     vueModel = window.ncvuesync.generateVueSync(syncInfo);
                     
-                    {string.Join( ";\r\n", includedMixIns.Select( mi => mi.CallMixins("vueModel")) )}
+                    {string.Join( ";\r\n", includedMixIns.Select( mi => mi.CallMixins(renderModel, "vueModel")) )}
 
                     Vue.createApp(vueModel).mount('#ncwapp');
                 </script>"));

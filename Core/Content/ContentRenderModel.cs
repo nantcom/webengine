@@ -6,6 +6,8 @@ namespace NC.WebEngine.Core.Content
     {
         public string SiteTitle { get; set; }
 
+        public string Language { get; set; } = "th";
+
         public ContentPage ContentPage { get; set; }
 
         public List<ContentPart> ContentParts { get; set; } = new();

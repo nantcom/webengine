@@ -8,6 +8,8 @@ namespace NC.WebEngine.Core.Content
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
 
+        public DateTimeOffset Created { get; set; } = DateTimeOffset.UtcNow;
+
         /// <summary>
         /// Language of this content part
         /// </summary>
@@ -28,5 +30,10 @@ namespace NC.WebEngine.Core.Content
         /// Content of this Content Part
         /// </summary>
         public string Content { get; set; }
+
+        /// <summary>
+        /// Whether the content is block format (from edit.js)
+        /// </summary>
+        public bool IsBlockContent { get; set; }
     }
 }

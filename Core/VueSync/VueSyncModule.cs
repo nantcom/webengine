@@ -115,7 +115,10 @@ namespace NC.WebEngine.Core.VueSync
 
             var instance = Activator.CreateInstance(handler.VueSyncModelType);
             var parameter = await JsonSerializer.DeserializeAsync(ctx.Request.Body, handler.MethodParameter);
+            
+            IVueModel? model = instance as IVueModel;
 
+            model!.OnPostback(ctx);
             var result = handler.Delegate(instance!, parameter!);
 
             return Results.Ok(result);

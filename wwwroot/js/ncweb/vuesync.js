@@ -58,6 +58,8 @@ window.ncvuesync.generateVueSync = function (syncInfo) {
 
     var instance = {};
 
+    instance.model = syncInfo.model;
+
     instance.data = function () {
 
         return {
