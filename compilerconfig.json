@@ -10,5 +10,9 @@
   {
     "outputFile": "wwwroot/css/ncweb/editor.css",
     "inputFile": "wwwroot/css/ncweb/editor.less"
+  },
+  {
+    "outputFile": "wwwroot/css/ncweb/editableimage.css",
+    "inputFile": "wwwroot/css/ncweb/editableimage.less"
   }
 ]

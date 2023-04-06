@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.Features;
 using NC.WebEngine.Core;
 using System.Reflection;
 using System.Text.Json;
@@ -16,7 +17,12 @@ namespace NC.WebEngine
             {
                 opt.SerializerOptions.PropertyNamingPolicy = null;
             });
-            
+
+            builder.Services.Configure<FormOptions>(x =>
+            {
+                x.MultipartBodyLengthLimit = 209715200;
+            });
+
             Program.RegisterBuilder(builder);
 
             var app = builder.Build();

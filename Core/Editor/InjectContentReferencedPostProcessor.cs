@@ -1,7 +1,8 @@
 ﻿using Fizzler.Systems.HtmlAgilityPack;
 using HtmlAgilityPack;
+using NC.WebEngine.Core.Content;
 
-namespace NC.WebEngine.Core.Content
+namespace NC.WebEngine.Core.Editor
 {
     /// <summary>
     /// This post processor set the content for element with ncweb-contentpart
