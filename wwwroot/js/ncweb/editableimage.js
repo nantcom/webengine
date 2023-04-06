@@ -22,6 +22,7 @@ window.nceditableimage.mixin = function (vueModelInstance, pageId) {
     }
 
 
+
     var currentMounted = vueModelInstance.mounted;
     var editorMounted = function () {
 
@@ -87,10 +88,10 @@ window.nceditableimage.mixin = function (vueModelInstance, pageId) {
 
                     $croppieArea.find('button').click(async function () {
 
-                        var result = await $("#nceditableimage_tocrop").croppie( 'result', 'blob', {oldWidth, oldHeight});
+                        var resultBlob = await $("#nceditableimage_tocrop").croppie( 'result', 'blob', {oldWidth, oldHeight});
 
                         const formData = new FormData();
-                        formData.append('file', result);
+                        formData.append('file', resultBlob);
                         formData.append('target', $me.attr("ncweb-editableimage"));
 
                         const options = {
@@ -104,8 +105,17 @@ window.nceditableimage.mixin = function (vueModelInstance, pageId) {
                         catch {
 
                         }
-                        
 
+                        $savedCheck.addClass("show").delay(2000).queue(function (next) {
+                            $(this).removeClass('show');
+                            next();
+                        });
+
+                        $croppieArea.removeClass("show");
+                        $croppieArea.html("");
+
+                        var final = await readFileAsync(resultBlob);
+                        img.src = final;
                     });
                 };
 
