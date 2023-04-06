@@ -19,40 +19,78 @@ window.nceditor.editormixin = function (vueModelInstance, pageId) {
         $("*[ncweb-contentpart]").each(function () {
             var me = $(this);
             var element = this;
+            var oldContent = me.html();
 
-            // edit image
-            $('<div class="ncweb_button edit">').click(function () {
+            var myPageId = pageId;
+            if (me.attr("ncweb-contentpageid") != null) {
+                myPageId = me.attr("ncweb-contentpageid");
+            }
+
+            var editButton = $('<div class="ncweb_button edit">');
+
+            var handleEdit = function () {
 
                 element.contentEditable = true;
-            }).appendTo(me);
+                element.addEventListener('keydown', function (event) {
+                    if (event.code !== 'Space') {
+                        return
+                    }
+                    event.preventDefault()
+                    document.execCommand("insertText", false, ' ')
+                })
 
-            $('<div class="ncweb_button save">').click(async function () {
+                var saveButton = $('<div class="ncweb_floatingbutton save">');
+                var cancelButton = $('<div class="ncweb_floatingbutton cancel">');
 
-                var html = element.outerHTML;
+                saveButton.click(async function () {
 
-                var $tempDom = $(html);
-                $tempDom.children(".ncweb_button").remove();
+                    var html = me.html();
 
-                html = $tempDom.html();
+                    await window.ncvuesync.callServer("NC.WebEngine.Core.Editor.EditorVueModel", "SavePart",
+                        {
+                            Language: null,
+                            Name: me.attr("ncweb-contentpart"),
+                            ContentPageId: parseInt(myPageId),
+                            Content: html,
+                            IsBlockContent: false
+                        });
 
-                await window.ncvuesync.callServer("NC.WebEngine.Core.Editor.EditorVueModel", "SavePart",
-                    {
-                        Language: null,
-                        Name: me.attr("ncweb-contentpart"),
-                        ContentPageId: pageId,
-                        Content: html,
-                        IsBlockContent: false
-                    });
-
-                $savedCheck.addClass("show").delay(2000).queue(function (next) {
-                    $(this).removeClass('show');
+                    $savedCheck.addClass("show").delay(2000).queue(function (next) {
+                        $(this).removeClass('show');
                         next();
                     });
 
-                element.contentEditable = false;
+                    cancelButton.remove();
+                    saveButton.remove();
 
+                    oldContent = html;
+                    element.contentEditable = false;
 
-            }).appendTo(me);
+                    editButton.appendTo(me);
+                    editButton.click(handleEdit);
+
+                }).appendTo('body');
+
+                cancelButton.click(async function () {
+
+                    cancelButton.remove();
+                    saveButton.remove();
+
+                    element.contentEditable = false;
+
+                    me.html(oldContent);
+                    editButton.appendTo(me);
+                    editButton.click(handleEdit);
+
+                }).appendTo('body');
+
+                editButton.remove();
+            };
+
+            // edit image
+            editButton.appendTo(me);
+            editButton.click(handleEdit);
+
         });
     }
 

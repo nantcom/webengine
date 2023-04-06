@@ -3,6 +3,10 @@ using HtmlAgilityPack;
 
 namespace NC.WebEngine.Core.Content
 {
+    /// <summary>
+    /// This post processor set the content for element with ncweb-contentpart
+    /// without ncweb-contentpage specified (which means it is the main content)
+    /// </summary>
     public class InjectContentPostProcessor : IPostProcessor
     {
         public void Process(ContentRenderModel renderModel, HtmlDocument document)
@@ -15,7 +19,8 @@ namespace NC.WebEngine.Core.Content
             foreach (var group in partGroup)
             {
                 var newest = group.Last();
-                var matchingElement = document.DocumentNode.QuerySelectorAll($"*[ncweb-contentpart='{group.Key}']");
+                var matchingElement = document.DocumentNode.QuerySelectorAll($"*[ncweb-contentpart='{group.Key}']")
+                                        .Where( el => el.Attributes.Contains("ncweb-contentpageid") == false);
 
                 foreach (var element in matchingElement)
                 {

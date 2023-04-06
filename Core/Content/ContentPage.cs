@@ -29,10 +29,8 @@ namespace NC.WebEngine.Core.Content
         public List<string> Keywords { get; set; } = new();
 
         /// <summary>
-        /// Content Parts as needed by this ContentPage
+        /// When this page was created
         /// </summary>
-        public List<string> ContentPartNames { get; set; } = new();
-
-
+        public DateTimeOffset Created { get; set; } = DateTimeOffset.UtcNow;
     }
 }

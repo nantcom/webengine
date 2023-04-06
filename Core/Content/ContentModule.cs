@@ -15,13 +15,6 @@ namespace NC.WebEngine.Core.Content
         /// </summary>
         public string SiteTitle { get; set; } = "Default Site";
 
-        /// <summary>
-        /// List of standard pages, which they will be pre-created
-        /// </summary>
-        public List<ContentPage> StandardPages { get; set; } = new();
-
-        public Dictionary<string, string> PageModels { get; set; } = new();
-
         private List<IPostProcessor> _postProcessors;
 
         public void Register(WebApplication app)

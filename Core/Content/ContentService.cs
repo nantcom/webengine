@@ -1,5 +1,6 @@
 ﻿using NC.WebEngine.Core.Data;
 using NC.WebEngine.Core.VueSync;
+using System;
 
 namespace NC.WebEngine.Core.Content
 {
@@ -9,6 +10,11 @@ namespace NC.WebEngine.Core.Content
         /// Site Name
         /// </summary>
         public string SiteTitle { get; set; } = "Default Site";
+
+        /// <summary>
+        /// List of standard pages, which they will be pre-created
+        /// </summary>
+        public List<ContentPage> StandardPages { get; set; } = new();
 
         public Dictionary<string, string> PageModels { get; set; } = new();
 
@@ -23,10 +29,28 @@ namespace NC.WebEngine.Core.Content
         {
             _db = db;
             config.Bind("ContentModule", this);
+
+            this.CreateStandardPages();
         }
 
         public ContentService()
         {
+        }
+
+        private void CreateStandardPages()
+        {
+            foreach (var page in this.StandardPages)
+            {
+                var exists = _db!.Connection.LinqTo<ContentPage>()
+                            .Where(x => x.Url == page.Url)
+                            .Result()
+                            .Any();
+
+                if (!exists)
+                {
+                    _db.Connection.Upsert(page);
+                }
+            }
         }
 
         /// <summary>
@@ -39,7 +63,7 @@ namespace NC.WebEngine.Core.Content
         /// <returns></returns>
         public ContentRenderModel GetContentRenderModel(HttpContext ctx, string url)
         {   
-            var pageToRender = _db.Connection.LinqTo<ContentPage>()
+            var pageToRender = _db!.Connection.LinqTo<ContentPage>()
                             .Where(x => x.Url == url)
                             .Result()
                             .FirstOrDefault();
@@ -52,8 +76,6 @@ namespace NC.WebEngine.Core.Content
             var parts = _db.Connection.LinqTo<ContentPart>()
                             .Where(cp => cp.ContentPageId == pageToRender.Id)
                             .Result();
-
-            pageToRender.ContentPartNames = parts.Select(p => p.Name).ToList();
 
             var vueModelTypeName = this.PageModels.ContainsKey(url) ? this.PageModels[url] : string.Empty;
             IVueModel? vueModelInstance = null;
@@ -69,8 +91,23 @@ namespace NC.WebEngine.Core.Content
                 SiteTitle = this.SiteTitle,
                 ContentPage = pageToRender,
                 ContentParts = parts.ToList(),
+                ContentService = this,
                 VueModel = vueModelInstance,
             };
+        }
+
+        public IEnumerable<ContentPage> GetPagesUnder( string url)
+        {
+            return _db!.Connection.LinqTo<ContentPage>()
+                            .Where(x => x.Url.StartsWith(url) && x.Url != url)
+                            .Result();
+        }
+
+        public IEnumerable<ContentPart> GetContentParts(int id)
+        {
+            return _db!.Connection.LinqTo<ContentPart>()
+                            .Where(x => x.ContentPageId == id)
+                            .Result();
         }
 
         /// <summary>

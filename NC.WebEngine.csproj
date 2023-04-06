@@ -26,6 +26,10 @@
 	<ItemGroup>
 		<!-- Exclude the output of source generators from the compilation -->
 		<Compile Remove="$(CompilerGeneratedFilesOutputPath)/**/*.cs" />
+		<Compile Remove="Views\NewFolder\**" />
+		<Content Remove="Views\NewFolder\**" />
+		<EmbeddedResource Remove="Views\NewFolder\**" />
+		<None Remove="Views\NewFolder\**" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Content Remove="compilerconfig.json" />
@@ -35,6 +39,9 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <None Include="compilerconfig.json" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="wwwroot\images\" />
 	</ItemGroup>
 
 </Project>

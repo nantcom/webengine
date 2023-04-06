@@ -1,4 +1,5 @@
 ﻿using NC.WebEngine.Core.VueSync;
+using System.Text.Json.Serialization;
 
 namespace NC.WebEngine.Core.Content
 {
@@ -14,7 +15,10 @@ namespace NC.WebEngine.Core.Content
 
         public IVueModel? VueModel { get; set; }
 
+        [JsonIgnore]
         public HttpContext HttpContext { get; set; }
+
+        public ContentService ContentService { get; set; }
 
         public static readonly ContentRenderModel NotFound = new();
     }
