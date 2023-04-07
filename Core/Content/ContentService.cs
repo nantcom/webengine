@@ -1,4 +1,5 @@
-﻿using NC.WebEngine.Core.Data;
+﻿using HtmlAgilityPack;
+using NC.WebEngine.Core.Data;
 using NC.WebEngine.Core.VueSync;
 using System;
 
@@ -62,7 +63,12 @@ namespace NC.WebEngine.Core.Content
         /// <param name="url"></param>
         /// <returns></returns>
         public ContentRenderModel GetContentRenderModel(HttpContext ctx, string url)
-        {   
+        {
+            if (url.StartsWith("/") == false)
+            {
+                url = "/" + url;
+            }
+
             var pageToRender = _db!.Connection.LinqTo<ContentPage>()
                             .Where(x => x.Url == url)
                             .Result()
@@ -110,6 +116,17 @@ namespace NC.WebEngine.Core.Content
                             .Result();
         }
 
+        public ContentPage CreatePage( string baseUrl )
+        {
+            var contentPage = new ContentPage();
+            contentPage.Url = $"{baseUrl}/{Guid.NewGuid()}";
+            contentPage.Title = "(New Page)";
+
+            _db!.Connection.Upsert(contentPage);
+
+            return contentPage;
+        }
+
         /// <summary>
         /// Saves the content part
         /// </summary>
@@ -123,6 +140,29 @@ namespace NC.WebEngine.Core.Content
             //TODO: Render HTML if block content
             //TODO: Sanitize the HTML
             _db!.Connection.Upsert( p );
+
+            if (p.Name == "Title" || p.Name == "Description")
+            {
+                var contentPage = _db!.Connection.LinqTo<ContentPage>()
+                                    .Where(page => page.Id == p.ContentPageId)
+                                    .Result()
+                                    .FirstOrDefault();
+
+                var doc = new HtmlDocument();
+                doc.LoadHtml(p.Content);
+
+                if (p.Name == "Title")
+                {
+                    contentPage.Title = doc.DocumentNode.InnerText;
+                }
+                else
+                {
+                    contentPage.Description = doc.DocumentNode.InnerText;
+                }
+                
+
+                _db!.Connection.Upsert(contentPage);
+            }
 
             return p;
         }

@@ -14,5 +14,9 @@
   {
     "outputFile": "wwwroot/css/ncweb/editableimage.css",
     "inputFile": "wwwroot/css/ncweb/editableimage.less"
+  },
+  {
+    "outputFile": "wwwroot/css/ncweb/editablecollection.css",
+    "inputFile": "wwwroot/css/ncweb/editablecollection.less"
   }
 ]

@@ -17,9 +17,15 @@ window.nceditor.editormixin = function (vueModelInstance, pageId) {
         $savedCheck.appendTo('body');
 
         $("*[ncweb-contentpart]").each(function () {
+
             var me = $(this);
             var element = this;
             var oldContent = me.html();
+
+            if (element.hasAttribute("readonly")) {
+                element.removeAttribute("ncweb-contentpart");
+                return;
+            }
 
             var myPageId = pageId;
             if (me.attr("ncweb-contentpageid") != null) {

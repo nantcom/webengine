@@ -14,4 +14,17 @@
         /// <param name="ctx"></param>
         void OnCreated(HttpContext ctx);
     }
+
+    public class EmptyVueModel : IVueModel
+    {
+        public static readonly EmptyVueModel Instance = new EmptyVueModel();
+
+        public void OnCreated(HttpContext ctx)
+        {
+        }
+
+        public void OnPostback(HttpContext ctx)
+        {
+        }
+    }
 }

@@ -349,6 +349,7 @@
                 ctx.rotate(-90 * Math.PI / 180);
                 break;
         }
+        ctx.imageSmoothingQuality = "high";
         ctx.drawImage(img, 0, 0, width, height);
         ctx.restore();
     }
@@ -1225,7 +1226,7 @@
         }
 
         // console.table({ left, right, top, bottom, canvasWidth, canvasHeight, width, height, startX, startY, circle, sx, sy, dx, dy, sWidth, sHeight, dWidth, dHeight });
-
+        ctx.imageSmoothingQuality = "high";
         ctx.drawImage(this.elements.preview, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
         if (circle) {
             ctx.fillStyle = '#fff';

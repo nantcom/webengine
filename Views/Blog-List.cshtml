@@ -1,0 +1,90 @@
+﻿@using NC.WebEngine.Core.Content;
+@using NC.WebEngine.ViewModels;
+@using NC.WebEngine.Core;
+
+@model ContentRenderModel
+
+@{
+    Layout = "Theme.cshtml";
+}
+
+@section Menu {
+
+    <ul class="nav nav-primary">
+        <li><a href="/blog" class="active"><i class="li-pen"></i>Blog</a></li>
+        <li><a href="/"><i class="li-home"></i>Back to Start</a></li>
+    </ul>
+}
+
+<!-- Page Title -->
+<div class="page-title pb-0">
+    <div class="container-fluid container-custom">
+        <h1 ncweb-contentpart="Title">Blog</h1>
+        <p class="lead text-muted"
+           ncweb-contentpart="Subtitle">Interesting articles about our business</p>
+    </div>
+</div>
+
+<!-- Section / Blog -->
+<section id="blog" class="section">
+
+    <div class="container-fluid container-custom clearfix">
+        <!-- Main -->
+        <div class="main left">
+            <div class="row masonry">
+                <div class="masonry-sizer col-sm-6 col-xs-12"></div>
+
+                @foreach (var page in this.Model.ContentService.GetPagesUnder("/blog"))
+                {
+                    <div class="masonry-item col-sm-6 col-xs-12">
+                        <!-- Post - Item -->
+                        <article class="post item">
+                            <div class="post-image">
+                                <img src="/assets/img/posts/post01.jpg" alt=""
+                                     ncweb-editableimage="/images/blog/@(page.Id)/list.png">
+                            </div>
+                            <div class="post-content">
+                                <span class="date text-muted">
+                                    @(page.Created.ToString("d MMMM yyyy"))
+                                </span>
+                                <h4>
+                                    <a href="@(page.Url)"
+                                       ncweb-contentpageid="@(page.Id)"
+                                       ncweb-contentpart="Title">
+                                        Road to success
+                                    </a>
+                                </h4>
+                                <p ncweb-contentpageid="@(page.Id)"
+                                   ncweb-contentpart="Intro">
+                                    Molestie sit amet lectus non commodo. Praesent in dignissim lectus, eu suscipit diam. Donec vitae turpis dictum...
+                                </p>
+                                <a href="@(page.Url)" class="btn btn-primary btn-sm">
+                                    Read more
+                                </a>
+
+                            </div>
+                            <ul class="post-meta">
+                                <li ncweb-contentpageid="@(page.Id)"
+                                    ncweb-contentpart="Tags">
+                                    <i class="li-usb1"></i>
+                                    <a href="#">Sport</a>, <a href="#">Motivation</a>
+                                </li>
+                                <li>
+                                    <i class="li-feedback"></i>
+                                    - feedback
+                                </li>
+                            </ul>
+                        </article>
+                    </div>
+                }
+
+            </div>
+            
+        </div>
+        <!-- Sidebar -->
+        <div class="sidebar right">
+            
+        </div>
+    </div>
+
+</section>

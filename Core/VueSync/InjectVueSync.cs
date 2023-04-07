@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Reflection;
 using NC.WebEngine.Core.VueSync;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using NC.WebEngine.Core.Editor;
 
 namespace NC.WebEngine.Core.Content.PostProcessors
 {
@@ -56,9 +57,18 @@ namespace NC.WebEngine.Core.Content.PostProcessors
 
         public void Process(ContentRenderModel renderModel, HtmlDocument document)
         {
-            var body = document.DocumentNode.QuerySelector("body");
+            bool includeEditor = true; // TODO: Make only authorized users have includeEditor rights
+            if (includeEditor)
+            {
+                if (renderModel.VueModel == null)
+                {
+                    renderModel.VueModel = EmptyVueModel.Instance;
+                }
+            }
+
             if ( renderModel.VueModel != null )
             {
+                var body = document.DocumentNode.QuerySelector("body");
                 body.AppendChild(HtmlNode.CreateNode("<script src=\"/js/vue/vue.global.min.js\"></script>"));
                 body.SetAttributeValue("id", "ncwapp");
 
