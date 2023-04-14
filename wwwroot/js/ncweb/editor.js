@@ -21,6 +21,7 @@ window.nceditor.editormixin = function (vueModelInstance, pageId) {
             var me = $(this);
             var element = this;
             var oldContent = me.html();
+            var myContentPartId = 0;
 
             if (element.hasAttribute("readonly")) {
                 element.removeAttribute("ncweb-contentpart");
@@ -35,6 +36,10 @@ window.nceditor.editormixin = function (vueModelInstance, pageId) {
             var editButton = $('<div class="ncweb_button edit">');
 
             var handleEdit = function () {
+
+                var currentButton = $(this);
+                $(".ncweb_button.edit").css("visibility", "hidden");
+                currentButton.css("visibility", "visible");
 
                 element.contentEditable = true;
                 element.addEventListener('keydown', function (event) {
@@ -52,14 +57,19 @@ window.nceditor.editormixin = function (vueModelInstance, pageId) {
 
                     var html = me.html();
 
-                    await window.ncvuesync.callServer("NC.WebEngine.Core.Editor.EditorVueModel", "SavePart",
+                    // on first save, we will get the content part id
+                    // if user save again in same edit seession, we will save to same id
+                    var result = await window.ncvuesync.callServer("NC.WebEngine.Core.Editor.EditorVueModel", "SavePart",
                         {
+                            Id: myContentPartId,
                             Language: null,
                             Name: me.attr("ncweb-contentpart"),
                             ContentPageId: parseInt(myPageId),
                             Content: html,
                             IsBlockContent: false
                         });
+
+                    myContentPartId = result.data.Id;
 
                     $savedCheck.addClass("show").delay(2000).queue(function (next) {
                         $(this).removeClass('show');
@@ -75,6 +85,8 @@ window.nceditor.editormixin = function (vueModelInstance, pageId) {
                     editButton.appendTo(me);
                     editButton.click(handleEdit);
 
+                    $(".ncweb_button.edit").css("visibility", "visible");
+
                 }).appendTo('body');
 
                 cancelButton.click(async function () {
@@ -87,6 +99,8 @@ window.nceditor.editormixin = function (vueModelInstance, pageId) {
                     me.html(oldContent);
                     editButton.appendTo(me);
                     editButton.click(handleEdit);
+
+                    $(".ncweb_button.edit").css("visibility", "visible");
 
                 }).appendTo('body');
 

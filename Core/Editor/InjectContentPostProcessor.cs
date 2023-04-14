@@ -12,22 +12,18 @@ namespace NC.WebEngine.Core.Editor
     {
         public void Process(ContentRenderModel renderModel, HtmlDocument document)
         {
-            var partGroup = from part in renderModel.ContentParts
-                            orderby part.Created
-                            group part by part.Name into g
-                            select g;
-
-            foreach (var group in partGroup)
+            foreach (var pair in renderModel.ContentParts)
             {
-                var newest = group.Last();
-                var matchingElement = document.DocumentNode.QuerySelectorAll($"*[ncweb-contentpart='{group.Key}']")
-                                        .Where( el => el.Attributes.Contains("ncweb-contentpageid") == false);
+                var newest = pair.Value;
+                var matchingElement = document.DocumentNode.QuerySelectorAll($"*[ncweb-contentpart='{pair.Key}']")
+                                        .Where(el => el.Attributes.Contains("ncweb-contentpageid") == false);
 
                 foreach (var element in matchingElement)
                 {
                     element.InnerHtml = newest.Content;
                 }
             }
+
         }
     }
 }

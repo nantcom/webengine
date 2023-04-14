@@ -33,6 +33,74 @@
         "vue.global.prod.js",
         "vue.global.prod.min.js"
       ]
+    },
+    {
+      "library": "editor.js@2.26.5",
+      "destination": "wwwroot/js/editorjs/"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "@editorjs/header@2.6.2",
+      "destination": "wwwroot/js/editorjs/header/",
+      "files": [
+        "dist/bundle.js",
+        "dist/bundle.min.js",
+        "assets/icon.svg"
+      ]
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "@editorjs/image@2.3.0",
+      "destination": "wwwroot/js/editorjs/image/",
+      "files": [
+        "dist/bundle.js",
+        "dist/bundle.min.js"
+      ]
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "@editorjs/embed@2.5.1",
+      "destination": "wwwroot/js/editorjs/embed/",
+      "files": [
+        "dist/bundle.js",
+        "dist/bundle.min.js"
+      ]
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "editorjs-alert@latest",
+      "destination": "wwwroot/js/editorjs/alert/",
+      "files": [
+        "dist/bundle.js",
+        "dist/bundle.min.js"
+      ]
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "@editorjs/list@1.7.0",
+      "destination": "wwwroot/js/editorjs/list/",
+      "files": [
+        "dist/bundle.js",
+        "dist/bundle.min.js"
+      ]
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "editorjs-undo@2.0.20",
+      "destination": "wwwroot/js/editorjs/undo",
+      "files": [
+        "dist/bundle.js",
+        "dist/bundle.min.js"
+      ]
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "editorjs-text-color-plugin@2.0.2",
+      "destination": "wwwroot/js/editorjs/text-color-plugin/",
+      "files": [
+        "dist/bundle.js",
+        "dist/bundle.min.js"
+      ]
     }
   ]
 }

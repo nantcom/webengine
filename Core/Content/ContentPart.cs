@@ -35,5 +35,6 @@ namespace NC.WebEngine.Core.Content
         /// Whether the content is block format (from edit.js)
         /// </summary>
         public bool IsBlockContent { get; set; }
+
     }
 }

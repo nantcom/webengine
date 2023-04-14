@@ -11,7 +11,9 @@ namespace NC.WebEngine.Core.Content
 
         public ContentPage ContentPage { get; set; }
 
-        public List<ContentPart> ContentParts { get; set; } = new();
+        public List<ContentPart> ContentPartHistory { get; set; } = new();
+
+        public Dictionary<string, ContentPart> ContentParts { get; set; } = new();
 
         public IVueModel? VueModel { get; set; }
 

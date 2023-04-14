@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using Microsoft.AspNetCore.Http.Features;
 using NC.WebEngine.Core.Data;
 using NC.WebEngine.Core.VueSync;
 using Razor.Templating.Core;
@@ -72,6 +73,12 @@ namespace NC.WebEngine.Core.Content
             {
                 ctx.Response.StatusCode = 404;
                 return;
+            }
+
+            var syncIoFeature = ctx.Features.Get<IHttpBodyControlFeature>();
+            if (syncIoFeature != null)
+            {
+                syncIoFeature.AllowSynchronousIO = true;
             }
 
             var html = await RazorTemplateEngine.RenderAsync(contentRendererModel.ContentPage.View, contentRendererModel);

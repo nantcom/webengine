@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using NC.WebEngine.Core.Data;
 using NC.WebEngine.Core.VueSync;
 using System;
@@ -92,11 +93,18 @@ namespace NC.WebEngine.Core.Content
                 vueModelInstance!.OnCreated(ctx);
             }
 
+            var latestParts = from part in parts
+                            orderby part.Created descending
+                            group part by part.Name into g
+                            select g.First();
+
+
             return new ContentRenderModel()
             {
                 SiteTitle = this.SiteTitle,
                 ContentPage = pageToRender,
-                ContentParts = parts.ToList(),
+                ContentPartHistory = parts.ToList(),
+                ContentParts = latestParts.ToDictionary( p => p.Name ),
                 ContentService = this,
                 VueModel = vueModelInstance,
             };
@@ -137,8 +145,6 @@ namespace NC.WebEngine.Core.Content
                 throw new InvalidOperationException("Require ContentPageId");
             }
 
-            //TODO: Render HTML if block content
-            //TODO: Sanitize the HTML
             _db!.Connection.Upsert( p );
 
             if (p.Name == "Title" || p.Name == "Description")
