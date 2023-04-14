@@ -13,16 +13,13 @@ window.ncblockeditor.mixin = function (vueModelInstance, pageId) {
 
         $('head').append('<link rel="stylesheet" type="text/css" href="/css/ncweb/editor.css">');
 
-        var $savedCheck = $('<div class="ncweb_saved"></div>');
-        $savedCheck.appendTo('body');
-
         $("*[ncweb-blockcontent]").each(function () {
 
             var me = $(this);
             var element = this;
             var myPageId = pageId;
             var editor = null;
-            var lastContent = null;
+            var lastContent = JSON.stringify(window.ncblockeditor.data);
             var contentPart =
             {
                 Id: 0,
@@ -32,6 +29,34 @@ window.ncblockeditor.mixin = function (vueModelInstance, pageId) {
                 Content: {},
                 IsBlockContent: true
             };
+
+
+            var saveBlock = async function () {
+
+                var result = await editor.save();
+
+                var current = JSON.stringify(result);
+                if (current == lastContent) {
+                    return;
+                }
+
+                me.addClass("notsaved");
+                contentPart.Content = JSON.stringify(result);
+
+                var result = await window.ncvuesync.callServer("NC.WebEngine.Core.Editor.EditorVueModel", "SavePart", contentPart);
+                contentPart.Id = result.data.Id;
+
+                me.addClass("saved").delay(1000).queue(function (next) {
+                    me.removeClass('saved');
+                    me.removeClass('notsaved');
+                    next();
+                });
+
+                lastContent = current;
+
+            };
+
+            var saveBlockDebouncer = $.debounce(1500, saveBlock);
 
             me.attr("id", "editorjs");
             editor = new EditorJS({
@@ -83,32 +108,18 @@ window.ncblockeditor.mixin = function (vueModelInstance, pageId) {
                     const undo = new Undo({ editor });
                     undo.initialize(window.ncblockeditor.data);
                 },
-                onChange: 
-                    $.debounce(5000, async function () {
+                onChange: function () {
 
-                        var result = await editor.save();
-
-                        var current = JSON.stringify(result);
-                        if (current == lastContent) {
-                            return;
-                        }
-
-                        contentPart.Content = JSON.stringify(result);
-
-                        var result = await window.ncvuesync.callServer("NC.WebEngine.Core.Editor.EditorVueModel", "SavePart", contentPart);
-                        contentPart.Id = result.data.Id;
-
-                        $savedCheck.addClass("show").delay(2000).queue(function (next) {
-                            $(this).removeClass('show');
-                            next();
-                        });
-
-                        lastContent = current;
-
-                    }),
+                    me.addClass("notsaved");
+                    saveBlockDebouncer();
+                },
                 data: window.ncblockeditor.data
             });
 
+            me.keypress(function () {
+
+                me.addClass("notsaved");
+            });
         });
     };
 
