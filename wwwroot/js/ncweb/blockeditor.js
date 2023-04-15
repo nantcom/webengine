@@ -30,7 +30,6 @@ window.ncblockeditor.mixin = function (vueModelInstance, pageId) {
                 IsBlockContent: true
             };
 
-
             var saveBlock = async function () {
 
                 var result = await editor.save();
@@ -58,13 +57,12 @@ window.ncblockeditor.mixin = function (vueModelInstance, pageId) {
 
             var saveBlockDebouncer = $.debounce(1500, saveBlock);
 
-            me.attr("id", "editorjs");
             editor = new EditorJS({
                 placeholder: 'Let`s write an awesome story!',
                 holderId: 'editorjs',
                 tools: {
                     header: Header,
-                    code: CodeTool,
+                    code: editorjsCodeflask,
                     embed: Embed,
                     Color: {
                         class: ColorPlugin,
@@ -102,7 +100,14 @@ window.ncblockeditor.mixin = function (vueModelInstance, pageId) {
                                 byUrl: '/__blockeditor/imagefetch'
                             }
                         }
-                    }
+                    },
+                    list: {
+                        class: List,
+                        inlineToolbar: true,
+                        config: {
+                            defaultStyle: 'unordered'
+                        }
+                    },
                 },
                 onReady: () => {
                     const undo = new Undo({ editor });
@@ -116,10 +121,54 @@ window.ncblockeditor.mixin = function (vueModelInstance, pageId) {
                 data: window.ncblockeditor.data
             });
 
+            var editorJsHost = $('<div id="editorjs"></div>').appendTo(me);
+            var previewHost = $('<div id="preview"></div>').appendTo(me);
+
             me.keypress(function () {
 
                 me.addClass("notsaved");
             });
+
+            var previewButton = $('<div class="ncweb_floatingbutton preview">');
+            var editButton = $('<div class="ncweb_floatingbutton backtoedit">');
+
+            editButton.click(async function () {
+
+                previewHost.html("");
+
+                previewHost.hide();
+                editorJsHost.fadeIn();
+
+                editButton.hide();
+                previewButton.fadeIn();
+
+                $("#prismcss").remove();
+
+            }).appendTo('body');
+
+            previewButton.click(async function () {
+
+                var content = await editor.save();
+                window.ncblockeditor.data = content;
+
+                var result = await window.ncvuesync.callServer("NC.WebEngine.Core.BlockEditor.BlockEditorVueModel", "Render", {
+                    IsBlockContent: true,
+                    Content: JSON.stringify(content)
+                });
+
+                var height = editorJsHost.height();
+                editorJsHost.hide();
+                
+                previewHost.css("min-height", height + "px");
+                previewHost.html(result.data);
+                previewHost.fadeIn();
+
+                previewButton.hide();
+                editButton.fadeIn();
+
+            }).appendTo('body');
+
+
         });
     };
 

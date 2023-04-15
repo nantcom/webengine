@@ -101,6 +101,16 @@
         "dist/bundle.js",
         "dist/bundle.min.js"
       ]
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "@calumk/editorjs-codeflask@1.0.9",
+      "destination": "wwwroot/js/editorjs/codeflask/",
+      "files": [
+        "dist/editorjs-codeflask.bundle.js",
+        "dist/editorjs-codeflask.bundle.js.LICENSE.txt",
+        "dist/editorjs-codeflask.bundle.min.js"
+      ]
     }
   ]
 }
