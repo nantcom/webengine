@@ -23,6 +23,8 @@ namespace NC.WebEngine
                 x.MultipartBodyLengthLimit = 209715200;
             });
 
+            builder.Services.AddMemoryCache();
+
             Program.RegisterBuilder(builder);
 
             var app = builder.Build();
