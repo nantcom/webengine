@@ -21,6 +21,8 @@ namespace NC.WebEngine.Core.Content
 
         public Dictionary<string, string> PageModels { get; set; } = new();
 
+        public Dictionary<string, string> PageLayouts { get; set; } = new();
+
         public void RegisterBuilder(WebApplicationBuilder builder)
         {
             builder.Services.AddSingleton<ContentService>();
@@ -86,9 +88,17 @@ namespace NC.WebEngine.Core.Content
                 return ContentRenderModel.NotFound;
             }
 
-            var parts = _db.Connection.LinqTo<ContentPart>()
-                            .Where(cp => cp.ContentPageId == pageToRender.Id)
-                            .Result();
+            if (string.IsNullOrEmpty(pageToRender.View))
+            {
+                foreach (var viewSettings in this.PageLayouts)
+                {
+                    if ( pageToRender.Url.StartsWith( viewSettings.Key ))
+                    {
+                        pageToRender.View = viewSettings.Value;
+                        break;
+                    }
+                }
+            }
 
             var vueModelTypeName = this.PageModels.ContainsKey(url) ? this.PageModels[url] : string.Empty;
             IVueModel? vueModelInstance = null;
@@ -98,6 +108,10 @@ namespace NC.WebEngine.Core.Content
                 vueModelInstance = (IVueModel?)Activator.CreateInstance(vueModelType);
                 vueModelInstance!.OnCreated(ctx);
             }
+
+            var parts = _db.Connection.LinqTo<ContentPart>()
+                            .Where(cp => cp.ContentPageId == pageToRender.Id)
+                            .Result();
 
             var latestParts = from part in parts
                             orderby part.Created descending
