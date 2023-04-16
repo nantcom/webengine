@@ -27,6 +27,31 @@
 *[ncweb-editablecollection]:hover .ncwebeditablecollection_button:hover {
   opacity: 1;
 }
+*[ncweb-editablecollection] [ncweb-itemdate] {
+  position: relative;
+  box-shadow: inset 0px 0px 0px 1px rgba(255, 202, 0, 0.3);
+}
+*[ncweb-editablecollection] [ncweb-itemdate]:hover {
+  box-shadow: inset 0px 0px 0px 1px rgba(255, 202, 0, 0.6);
+}
+*[ncweb-editablecollection] [ncweb-itemdate] input.picker[type="datetime-local"] {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  opacity: 0.01;
+}
+*[ncweb-editablecollection] [ncweb-itemdate] input.picker[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  color: transparent;
+  background: rgba(0, 0, 0, 0.1);
+}
 .ncwebeditablecollection_button.add {
   background-image: url("data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgaWQ9IlNWR1JlcG9fYmdDYXJyaWVyIiBzdHJva2Utd2lkdGg9IjAiPjwvZz48ZyBpZD0iU1ZHUmVwb190cmFjZXJDYXJyaWVyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjwvZz48ZyBpZD0iU1ZHUmVwb19pY29uQ2FycmllciI+IDxnIGlkPSJFZGl0IC8gQWRkX1BsdXMiPiA8cGF0aCBpZD0iVmVjdG9yIiBkPSJNNiAxMkgxMk0xMiAxMkgxOE0xMiAxMlYxOE0xMiAxMlY2IiBzdHJva2U9IiMwMDAwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48L3BhdGg+IDwvZz4gPC9nPjwvc3ZnPg==");
   top: 54px;

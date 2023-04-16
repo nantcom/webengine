@@ -37,7 +37,7 @@ window.nceditablecollection.mixin = function (vueModelInstance, pageId) {
                     window.location.reload();
 
                 })
-            .appendTo($me);
+                .appendTo($me);
         });
 
         $("*[ncweb-editablecollection]").each(function () {
@@ -59,6 +59,50 @@ window.nceditablecollection.mixin = function (vueModelInstance, pageId) {
 
                 })
                 .appendTo($me);
+        });
+
+
+        $("*[ncweb-editablecollection] *[ncweb-itemdate]").each(function () {
+
+            var $me = $(this);
+            var element = this;
+            var currentValue = $me.attr("ncweb-itemdate");
+            var itemId = $me.parents("[itemid]").attr("itemid");
+
+            var valueAsDate = new Date(parseInt(currentValue));
+            valueAsDate.setMinutes(valueAsDate.getMinutes() - valueAsDate.getTimezoneOffset())
+
+            var curretnValueString = valueAsDate.toISOString().slice(0, 19);
+
+            var rebuildInput = function () {
+
+                $('<input class="picker" type="datetime-local">')
+                    .change(async function () {
+
+                        var newValue = $(this)[0].value;
+
+                        var result = await window.ncvuesync.callServer("NC.WebEngine.Core.EditableCollection.EditableCollectionVueModel",
+                            "SetPageDate",
+                            {
+                                pageId: parseInt(itemId),
+                                outputFormat: $me.attr("ncweb-itemdateformat"),
+                                date: newValue
+                            });
+
+                        if (result.isSuccess) {
+
+                            curretnValueString = newValue;
+                            $me.text(result.data);
+                            rebuildInput();
+
+                            alert("Value was set, refresh the page to see new items rearranged");
+                        }
+
+                    })
+                    .attr("value", curretnValueString)
+                    .appendTo($me);
+            };
+            rebuildInput();
         });
     }
 

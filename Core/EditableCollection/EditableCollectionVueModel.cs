@@ -5,6 +5,15 @@ namespace NC.WebEngine.Core.EditableCollection
 {
     public class EditableCollectionVueModel : IVueModel
     {
+        public class SetPageDateParameter
+        {
+            public int pageId { get; set; }
+
+            public string date { get; set; }
+
+            public string outputFormat { get; set; } = "dd MMMM yyyy";
+        }
+
         private ContentService contentService;
 
         [VueCallableMethod]
@@ -17,6 +26,16 @@ namespace NC.WebEngine.Core.EditableCollection
         public void DeletePage(int pageId)
         {
             contentService.DeletePage( pageId );
+        }
+
+        [VueCallableMethod]
+        public string SetPageDate(SetPageDateParameter p)
+        {
+            var dt = DateTimeOffset.Parse(p.date);
+
+            contentService.ChangePageDate( p.pageId, dt );
+
+            return dt.ToString(p.outputFormat);
         }
 
         public void OnPostback(HttpContext ctx)

@@ -35,6 +35,35 @@
 
         box-shadow: inset 0px 0px 0px 1px @ncyellow;
     }
+
+    [ncweb-itemdate] {
+        position: relative;
+        box-shadow: inset 0px 0px 0px 1px fade(@ncyellow,30%);
+
+        &:hover {
+            box-shadow: inset 0px 0px 0px 1px fade(@ncyellow,60%);
+        }
+
+        input.picker[type="datetime-local"] {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            opacity: 0.01;
+        }
+
+        input.picker[type="datetime-local"]::-webkit-calendar-picker-indicator {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            color: transparent;
+            background: rgba(0,0,0,0.1);
+        }
+    }
 }
 
 .ncwebeditablecollection_button.add {

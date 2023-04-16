@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NC.WebEngine.Core.Data;
 using NC.WebEngine.Core.VueSync;
@@ -193,11 +194,7 @@ namespace NC.WebEngine.Core.Content
             return p;
         }
 
-        /// <summary>
-        /// Delete page of given id - the page URL will change to /deleted/{date-time}
-        /// </summary>
-        /// <param name="id"></param>
-        public void DeletePage( int id )
+        private ContentPage GetPageById(int id)
         {
             var page = _db!.Connection.LinqTo<ContentPage>()
                             .Where(page => page.Id == id)
@@ -209,6 +206,17 @@ namespace NC.WebEngine.Core.Content
                 throw new ArgumentException("Not a valid page id");
             }
 
+            return page;
+        }
+
+        /// <summary>
+        /// Delete page of given id - the page URL will change to /deleted/{date-time}
+        /// </summary>
+        /// <param name="id"></param>
+        public void DeletePage( int id )
+        {
+            var page = this.GetPageById(id);
+
             if (page.Url.StartsWith("/deleted"))
             {
                 return;
@@ -217,6 +225,22 @@ namespace NC.WebEngine.Core.Content
             page.Url = $"/deleted/{DateTime.Now.ToString("yyyyMMdd-HHmm")}{page.Url}";
 
             _db!.Connection.Upsert(page);
+        }
+
+        /// <summary>
+        /// Change the created date of the page
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        public ContentPage ChangePageDate( int id, DateTimeOffset newDate )
+        {
+            var page = this.GetPageById(id);
+
+            page.Created = newDate;
+
+            _db!.Connection.Upsert(page);
+
+            return page;
         }
     }
 }

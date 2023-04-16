@@ -213,7 +213,7 @@
                 ]
             }'>
 
-            @foreach (var page in this.Model.ContentService.GetPagesUnder("/blog"))
+            @foreach (var page in this.Model.ContentService.GetPagesUnder("/blog").OrderByDescending( p => p.Created ))
             {
                 <div class="carousel-item"
                      ncweb-collectionitem itemid="@(page.Id)">
@@ -223,9 +223,11 @@
                                  ncweb-editableimage="images/blog/@(page.Id)/carousel.png">
                         </div>
                         <div class="post-content">
-                            <span class="date text-muted">
+                            <div class="date text-muted"
+                                 ncweb-itemdate="@(page.Created.ToUnixTimeMilliseconds())"
+                                 ncweb-itemdateformat="dd MMMM yyyy">
                                 @(page.Created.ToString("dd MMMM yyyy"))
-                            </span>
+                            </div>
                             <h4>
                                 <a href="@(page.Url)"
                                    ncweb-contentpageid="@(page.Id)"
