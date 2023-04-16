@@ -1,7 +1,7 @@
 ﻿*[ncweb-editablecollection] *[ncweb-collectionitem] {
   position: relative;
 }
-*[ncweb-editablecollection] *[ncweb-collectionitem] .ncwebeditablecollection_button {
+*[ncweb-editablecollection] .ncwebeditablecollection_button {
   width: 48px;
   height: 48px;
   background-color: #ffca00;
@@ -17,14 +17,14 @@
   cursor: pointer;
   transition: all ease 0.3s;
 }
-*[ncweb-editablecollection] *[ncweb-collectionitem]:hover {
+*[ncweb-editablecollection]:hover {
   box-shadow: inset 0px 0px 0px 1px #ffca00;
 }
-*[ncweb-editablecollection] *[ncweb-collectionitem]:hover .ncwebeditablecollection_button {
+*[ncweb-editablecollection]:hover .ncwebeditablecollection_button {
   pointer-events: all;
   opacity: 0.3;
 }
-*[ncweb-editablecollection] *[ncweb-collectionitem]:hover .ncwebeditablecollection_button:hover {
+*[ncweb-editablecollection]:hover .ncwebeditablecollection_button:hover {
   opacity: 1;
 }
 .ncwebeditablecollection_button.add {

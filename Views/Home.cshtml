@@ -189,7 +189,8 @@
 </section>
 
 <!-- Section / Latest Posts -->
-<section id="latest-posts" class="section">
+<section id="latest-posts" class="section"
+         ncweb-editablecollection="/blog">
 
     <div class="container-fluid container-custom">
         <h2 class="mb-50">Latest Posts <a href="/blog" class="ml-20 btn btn-secondary btn-sm animated" data-animation="fadeInRight">Go to Blog</a></h2>
@@ -210,8 +211,7 @@
                         }
                     }
                 ]
-            }'
-             ncweb-editablecollection="/blog">
+            }'>
 
             @foreach (var page in this.Model.ContentService.GetPagesUnder("/blog"))
             {
@@ -242,11 +242,6 @@
                             </a>
                         </div>
                         <ul class="post-meta">
-                            <li ncweb-contentpageid="@(page.Id)"
-                                ncweb-contentpart="Tags">
-                                <i class="li-usb1"></i>
-                                <a href="#">Sport</a>, <a href="#">Motivation</a>
-                            </li>
                             <li>
                                 <i class="li-feedback"></i>
                                 - feedback

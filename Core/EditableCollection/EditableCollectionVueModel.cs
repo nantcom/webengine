@@ -13,6 +13,12 @@ namespace NC.WebEngine.Core.EditableCollection
             return contentService.CreatePage( baseUrl );
         }
 
+        [VueCallableMethod]
+        public void DeletePage(int pageId)
+        {
+            contentService.DeletePage( pageId );
+        }
+
         public void OnPostback(HttpContext ctx)
         {
             contentService = ctx.RequestServices.GetRequiredService<ContentService>();

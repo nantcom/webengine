@@ -4,36 +4,36 @@
 
     *[ncweb-collectionitem] {
         position: relative;
+    }
 
+    .ncwebeditablecollection_button {
+        width: 48px;
+        height: 48px;
+        background-color: @ncyellow;
+        position: absolute;
+        z-index: 99;
+        right: 0;
+        border-radius: 48px;
+        background-size: 28px;
+        background-position: center center;
+        background-repeat: no-repeat;
+        pointer-events: none;
+        opacity: 0;
+        cursor: pointer;
+        transition: all ease 0.3s;
+    }
+
+    &:hover {
         .ncwebeditablecollection_button {
-            width: 48px;
-            height: 48px;
-            background-color: @ncyellow;
-            position: absolute;
-            z-index: 99;
-            right: 0;
-            border-radius: 48px;
-            background-size: 28px;
-            background-position: center center;
-            background-repeat: no-repeat;
-            pointer-events: none;
-            opacity: 0;
-            cursor: pointer;
-            transition: all ease 0.3s;
-        }
+            pointer-events: all;
+            opacity: 0.3;
 
-        &:hover {
-            .ncwebeditablecollection_button {
-                pointer-events: all;
-                opacity: 0.3;
-
-                &:hover {
-                    opacity: 1;
-                }
+            &:hover {
+                opacity: 1;
             }
-
-            box-shadow: inset 0px 0px 0px 1px @ncyellow;
         }
+
+        box-shadow: inset 0px 0px 0px 1px @ncyellow;
     }
 }
 

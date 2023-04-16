@@ -30,6 +30,7 @@ namespace NC.WebEngine.Core.VueSync
 
         private Dictionary<string, SyncMethod> _SyncMethods = new();
         private Dictionary<string, CallableMethod> _CallableMethods = new();
+        private Dictionary<string, string> _ShortTypeMap = new();
 
         public void Register(WebApplication app)
         {

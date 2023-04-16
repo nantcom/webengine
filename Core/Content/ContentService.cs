@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using NC.WebEngine.Core.Data;
 using NC.WebEngine.Core.VueSync;
 using System;
+using System.Runtime.CompilerServices;
 
 namespace NC.WebEngine.Core.Content
 {
@@ -65,6 +66,11 @@ namespace NC.WebEngine.Core.Content
         /// <returns></returns>
         public ContentRenderModel GetContentRenderModel(HttpContext ctx, string url)
         {
+            if (url.StartsWith("/deleted"))
+            {
+                return ContentRenderModel.NotFound;
+            }
+
             if (url.StartsWith("/") == false)
             {
                 url = "/" + url;
@@ -171,6 +177,32 @@ namespace NC.WebEngine.Core.Content
             }
 
             return p;
+        }
+
+        /// <summary>
+        /// Delete page of given id - the page URL will change to /deleted/{date-time}
+        /// </summary>
+        /// <param name="id"></param>
+        public void DeletePage( int id )
+        {
+            var page = _db!.Connection.LinqTo<ContentPage>()
+                            .Where(page => page.Id == id)
+                            .Result()
+                            .FirstOrDefault();
+
+            if (page == null)
+            {
+                throw new ArgumentException("Not a valid page id");
+            }
+
+            if (page.Url.StartsWith("/deleted"))
+            {
+                return;
+            }
+
+            page.Url = $"/deleted/{DateTime.Now.ToString("yyyyMMdd-HHmm")}{page.Url}";
+
+            _db!.Connection.Upsert(page);
         }
     }
 }

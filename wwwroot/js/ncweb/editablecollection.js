@@ -20,22 +20,31 @@ window.nceditablecollection.mixin = function (vueModelInstance, pageId) {
             var element = this;
 
             $('<button class="ncwebeditablecollection_button remove"></button>')
-                .click(function () {
+                .click(async function () {
 
                     if (element.hasAttribute("itemid") == false) {
                         alert("Missing Item Id");
                         return;
                     }
 
+                    if (confirm(`Moving this item to recycle bin?`) == false) {
+                        return;
+                    }
+
+                    await window.ncvuesync.callServer("NC.WebEngine.Core.EditableCollection.EditableCollectionVueModel",
+                        "DeletePage", parseInt($me.attr("itemid")));
+
+                    window.location.reload();
+
                 })
             .appendTo($me);
         });
 
-        $("*[ncweb-editablecollection] *[ncweb-collectionitem]").first().each(function () {
+        $("*[ncweb-editablecollection]").each(function () {
 
             var $me = $(this);
             var element = this;
-            var parent = $me.parents("*[ncweb-editablecollection]").attr("ncweb-editablecollection");
+            var parent = $me.attr("ncweb-editablecollection");
 
             $('<button class="ncwebeditablecollection_button add"></button>')
                 .click(async function () {
