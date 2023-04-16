@@ -1,0 +1,27 @@
+﻿[ncweb-editablebackground] .ncwebeditablebackground_button {
+  width: 48px;
+  height: 48px;
+  background-color: #ffca00;
+  position: absolute;
+  z-index: 99;
+  right: 0;
+  border-radius: 48px;
+  background-size: 28px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  opacity: 0;
+  cursor: pointer;
+  transition: all ease 0.3s;
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0nNDhweCcgaGVpZ2h0PSc0OHB4JyB2aWV3Qm94PSctNC44IC00LjggNTcuNjAgNTcuNjAnIHZlcnNpb249JzEnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZycgZW5hYmxlLWJhY2tncm91bmQ9J25ldyAwIDAgNDggNDgnIGZpbGw9JyMwMDAwMDAnPjxnIGlkPSdTVkdSZXBvX2JnQ2Fycmllcicgc3Ryb2tlLXdpZHRoPScwJz48L2c+PGcgaWQ9J1NWR1JlcG9fdHJhY2VyQ2Fycmllcicgc3Ryb2tlLWxpbmVjYXA9J3JvdW5kJyBzdHJva2UtbGluZWpvaW49J3JvdW5kJyBzdHJva2U9JyMwMDAwMDAnIHN0cm9rZS13aWR0aD0nMC45NjAwMDAwMDAwMDAwMDAyJz48L2c+PGcgaWQ9J1NWR1JlcG9faWNvbkNhcnJpZXInPjxwYXRoIGZpbGw9JyNmZmZmZmYnIGQ9J00zMSw0MUg4Yy0yLjIsMC00LTEuOC00LTRWMTFjMC0yLjIsMS44LTQsNC00aDMyYzIuMiwwLDQsMS44LDQsNHYxN0M0NCwzNS4yLDM4LjIsNDEsMzEsNDF6Jz48L3BhdGg+PGNpcmNsZSBmaWxsPScjQjNEREY1JyBjeD0nMzUnIGN5PScxNicgcj0nMyc+PC9jaXJjbGU+PHBvbHlnb24gZmlsbD0nIzlBQzlFMycgcG9pbnRzPScyMCwxNiA5LDMyIDMxLDMyJz48L3BvbHlnb24+PHBvbHlnb24gZmlsbD0nI0IzRERGNScgcG9pbnRzPSczMSwyMiAyMywzMiAzOSwzMic+PC9wb2x5Z29uPjxwYXRoIGZpbGw9JyNFNTczNzMnIGQ9J000Ny43LDI5LjFsLTIuOC0yLjhjLTAuNC0wLjQtMS4xLTAuNC0xLjYsMEw0MiwyNy42bDQuNCw0LjRsMS4zLTEuM0M0OC4xLDMwLjMsNDguMSwyOS42LDQ3LjcsMjkuMXonPjwvcGF0aD48cmVjdCB4PScyNy4xJyB5PSczNS4xJyB0cmFuc2Zvcm09J21hdHJpeCguNzA3IC0uNzA3IC43MDcgLjcwNyAtMTYuNTA4IDM2LjUxMSknIGZpbGw9JyNGRjk4MDAnIHdpZHRoPScxNy40JyBoZWlnaHQ9JzYuMic+PC9yZWN0PjxyZWN0IHg9JzQxLjUnIHk9JzI3LjgnIHRyYW5zZm9ybT0nbWF0cml4KC0uNzA3IC43MDcgLS43MDcgLS43MDcgOTUuMzk1IDIyLjM1MiknIGZpbGw9JyNCMEJFQzUnIHdpZHRoPSczLjEnIGhlaWdodD0nNi4yJz48L3JlY3Q+PHBvbHlnb24gZmlsbD0nI0ZGQzEwNycgcG9pbnRzPScyNy41LDQyLjIgMjYsNDggMzEuOCw0Ni41Jz48L3BvbHlnb24+PHBvbHlnb24gZmlsbD0nIzM3NDc0RicgcG9pbnRzPScyNi43LDQ1IDI2LDQ4IDI5LDQ3LjMnPjwvcG9seWdvbj48L2c+PC9zdmc+");
+}
+[ncweb-editablebackground]:hover {
+  box-shadow: inset 0px 0px 10px 4px #ffca00;
+}
+[ncweb-editablebackground]:hover .ncwebeditablebackground_button {
+  pointer-events: all;
+  opacity: 0.3;
+}
+[ncweb-editablebackground]:hover .ncwebeditablebackground_button:hover {
+  opacity: 1;
+}
