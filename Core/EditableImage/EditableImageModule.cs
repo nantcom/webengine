@@ -18,11 +18,17 @@ namespace NC.WebEngine.Core.EditableImage
                 return Results.BadRequest();
             }
 
+            var target = ctx.Request.Form["target"]!.ToString();
+            if (target.StartsWith("/"))
+            {
+                target = target.Substring(1);
+            }
+
             // Image is resized at client side, we only save the file
             var uploadedFile = ctx.Request.Form.Files[0];
             var targetFile = Path.Combine( Directory.GetCurrentDirectory(),
                                 "wwwroot",
-                                ctx.Request.Form["target"]!.ToString().Replace("/", "\\"));
+                                target);
 
             Directory.CreateDirectory(Path.GetDirectoryName(targetFile)!);
 

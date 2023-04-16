@@ -60,6 +60,11 @@ var Skill = {
             // Image
             $('.bg-image').each(function(){
                 var src = $(this).children('img').attr('src');
+
+                if (src == null) {
+                    return;
+                }
+
                 $(this).css('background-image','url('+src+')').children('img').hide();
             });
 

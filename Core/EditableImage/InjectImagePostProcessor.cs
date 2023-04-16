@@ -17,6 +17,11 @@ namespace NC.WebEngine.Core.Editor
             foreach ( var element in matchingElement )
             {
                 var file = element.GetAttributeValue("ncweb-editableimage", "should_not_exists.xxx");
+                if (file.StartsWith("/"))
+                {
+                    file = file.Substring(1);
+                }
+
                 var targetFile = Path.Combine(Directory.GetCurrentDirectory(),
                                     "wwwroot",
                                     file);
@@ -26,7 +31,7 @@ namespace NC.WebEngine.Core.Editor
                     continue;
                 }
 
-                element.SetAttributeValue("src", file);
+                element.SetAttributeValue("src", "/" + file);
             }
 
         }

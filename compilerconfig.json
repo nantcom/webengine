@@ -18,5 +18,9 @@
   {
     "outputFile": "wwwroot/css/ncweb/editablecollection.css",
     "inputFile": "wwwroot/css/ncweb/editablecollection.less"
+  },
+  {
+    "outputFile": "wwwroot/css/ncweb/editablebackground.css",
+    "inputFile": "wwwroot/css/ncweb/editablebackground.less"
   }
 ]
