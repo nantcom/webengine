@@ -42,13 +42,16 @@ window.nceditor.editormixin = function (vueModelInstance, pageId) {
                 currentButton.css("visibility", "visible");
 
                 element.contentEditable = true;
-                element.addEventListener('keydown', function (event) {
-                    if (event.code !== 'Space') {
-                        return
-                    }
-                    event.preventDefault()
-                    document.execCommand("insertText", false, ' ')
-                })
+
+                if (element.hasAttribute("spaceissue")) {
+                    element.addEventListener('keydown', function (event) {
+                        if (event.code !== 'Space') {
+                            return
+                        }
+                        event.preventDefault()
+                        document.execCommand("insertText", false, ' ')
+                    })
+                }
 
                 var saveButton = $('<div class="ncweb_floatingbutton save">');
                 var cancelButton = $('<div class="ncweb_floatingbutton cancel">');

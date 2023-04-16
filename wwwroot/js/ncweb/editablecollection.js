@@ -95,7 +95,9 @@ window.nceditablecollection.mixin = function (vueModelInstance, pageId) {
                             $me.text(result.data);
                             rebuildInput();
 
-                            alert("Value was set, refresh the page to see new items rearranged");
+                            if (confirm("Date was changed, Do you want to refresh the page to see list re-arranged?") == true) {
+                                window.location.reload();
+                            }
                         }
 
                     })

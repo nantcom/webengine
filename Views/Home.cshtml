@@ -229,14 +229,15 @@
                                 @(page.Created.ToString("dd MMMM yyyy"))
                             </div>
                             <h4>
-                                <a href="@(page.Url)"
+                                <a href="@(page.Url)" spaceissue
                                    ncweb-contentpageid="@(page.Id)"
                                    ncweb-contentpart="Title">
                                     Road to success
                                 </a>
                             </h4>
                             <p ncweb-contentpageid="@(page.Id)"
-                               ncweb-contentpart="Description">
+                               ncweb-contentpart="Description"
+                               spaceissue>
                                 Molestie sit amet lectus non commodo. Praesent in dignissim lectus, eu suscipit diam. Donec vitae turpis dictum...
                             </p>
                             <a href="@(page.Url)" class="btn btn-primary btn-sm">
