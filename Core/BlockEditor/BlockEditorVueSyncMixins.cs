@@ -1,4 +1,5 @@
 ﻿using NC.WebEngine.Core.Content;
+using NC.WebEngine.Core.Membership;
 using NC.WebEngine.Core.VueSync;
 using System.Text;
 
@@ -48,8 +49,7 @@ namespace NC.WebEngine.Core.Editor
 
         public bool WillInclude(ContentRenderModel renderModel)
         {
-            //TODO: Check Login
-            return true;
+            return renderModel.HttpContext.RequestServices.GetRequiredService<MembershipService>().IsEditor;
         }
     }
 }
