@@ -17,6 +17,7 @@ public static class CookieKeys
 public static class ConfigKeys
 {
     public const string AzureADB2C = "AzureAdB2C";
+    public const string RBAC = "RBAC";
 }
 
 public static class QueryStringKeys

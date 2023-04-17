@@ -6,6 +6,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Caching.Memory;
 using System.Security.Principal;
+using System.Data;
 
 namespace NC.WebEngine.Core.Membership;
 
@@ -50,12 +51,33 @@ public class LoginModule : IModule
         public string n { get; set; }
     }
 
+    public class RBACSettings
+    {
+        public string SiteId { get; set; }
+
+        public string ClientId { get; set; }
+
+        public string ClientSecret { get; set; }
+
+        public string RoleAttribute { get; set; }
+
+        /// <summary>
+        /// If set, entry in the Role Claim array must include SiteId after underscore
+        /// for example ["Admin", "Editor"] would not grant Admin or Editor Role
+        /// but ["Admin_3c33258d-e8ee-477e-b94c-680fe0900f3f", "Editor"] will grant
+        /// Admin role for Site that has site Id 3c33258d-e8ee-477e-b94c-680fe0900f3f set in RBAC settings
+        /// </summary>
+        public bool IsUseSiteSpecificRole { get; set; }
+    }
+
     public AzureADSettings AzureADB2C { get; set; } = new();
     public AzureADOpenIdSettings OpenIdSettings = new();
+    public RBACSettings RBAC { get; set; } = new();
 
     public void Register(WebApplication app)
     {
         app.Configuration.Bind(ConfigKeys.AzureADB2C, this.AzureADB2C);
+        app.Configuration.Bind(ConfigKeys.RBAC, this.RBAC);
 
         this.OpenIdSettings = ReadConfiguration(this.AzureADB2C).Result;
 
@@ -149,49 +171,58 @@ public class LoginModule : IModule
         var handler = new JwtSecurityTokenHandler();
         var jwtToken = handler.ReadJwtToken(token);
 
-        if (jwtToken.ValidTo >= DateTime.UtcNow)
+        if (jwtToken.ValidTo <= DateTime.UtcNow)
         {
             cache.Remove(token);
             return null;
         }
 
         ClaimsPrincipal? user = null;
+
+        Action<string> extractRoles = (claimType) =>
+        {
+            var rolesClaim = user.Claims.Where(item => item.Type == claimType).FirstOrDefault();
+
+            if (rolesClaim != null)
+            {
+                var roles = JsonSerializer.Deserialize<string[]>(rolesClaim.Value);
+                foreach (var role in roles)
+                {
+                    if (this.RBAC.IsUseSiteSpecificRole)
+                    {
+                        var rolePart = role.Split("_", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                        if (rolePart.Length == 2 && rolePart[1] == this.RBAC.SiteId)
+                        {
+                            user.AddIdentity(new ClaimsIdentity(new[] { new Claim(ClaimTypes.Role, rolePart[0]) }));
+                            user.AddIdentity(new ClaimsIdentity(new[] { new Claim("roles", rolePart[0]) }));
+                        }
+                    }
+                    else
+                    {
+                        user.AddIdentity(new ClaimsIdentity(new[] { new Claim(ClaimTypes.Role, role) }));
+                        user.AddIdentity(new ClaimsIdentity(new[] { new Claim("roles", role) }));
+                    }
+                }
+            }
+        };
+
         try
         {
             SecurityToken validatedToken;
             user = handler.ValidateToken(token, this.OpenIdSettings.ValidationParameters, out validatedToken);
 
             // Add Roles from Roles Claim from Azure AD B2C
-            var rolesClaim = user.Claims.Where(item => item.Type == "extension_Roles").FirstOrDefault();
-            if (rolesClaim != null)
-            {
-                var roles = JsonSerializer.Deserialize<string[]>(rolesClaim.Value);
-                foreach (var role in roles)
-                {
-                    user.AddIdentity(new ClaimsIdentity(new[] { new Claim(ClaimTypes.Role, role) }));
-                    user.AddIdentity(new ClaimsIdentity(new[] { new Claim("roles", role) }));
-                }
-            }
+            extractRoles("roles");
+            extractRoles("extension_Roles");
 
-            // Add Roles from Azure AD Roles claim
-            rolesClaim = user.Claims.Where(item => item.Type == "roles").FirstOrDefault();
-            if (rolesClaim != null)
-            {
-                var roles = JsonSerializer.Deserialize<string[]>(rolesClaim.Value);
-                foreach (var role in roles)
-                {
-                    user.AddIdentity(new ClaimsIdentity(new[] { new Claim(ClaimTypes.Role, role) }));
-                    user.AddIdentity(new ClaimsIdentity(new[] { new Claim("roles", role) }));
-                }
-            }
-
+            // We made the cache expire slightly before token, so we can get a new one
+            cache.Set(token, user, new DateTimeOffset(jwtToken.ValidTo.AddSeconds(-20)));
         }
         catch (Exception e)
         {
+            cache.Remove(token);
         }
 
-        // We made the cache expire slightly before token, so we can get a new one
-        cache.Set(token, user, new DateTimeOffset(jwtToken.ValidTo.AddSeconds(-20)));
 
         return user;
     }
