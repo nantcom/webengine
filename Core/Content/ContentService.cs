@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NC.WebEngine.Core.Data;
 using NC.WebEngine.Core.VueSync;
+using Razor.Templating.Core;
 using System;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace NC.WebEngine.Core.Content
@@ -36,6 +38,7 @@ namespace NC.WebEngine.Core.Content
             _db = db;
             config.Bind("ContentModule", this);
 
+            this.DiscoverPostProcessors();
             this.CreateStandardPages();
         }
 
@@ -57,6 +60,38 @@ namespace NC.WebEngine.Core.Content
                     _db.Connection.Upsert(page);
                 }
             }
+        }
+
+
+        private List<IPostProcessor> _postProcessors;
+
+        private void DiscoverPostProcessors()
+        {
+            _postProcessors = Assembly.GetExecutingAssembly().GetTypes()
+                                .Where(t => typeof(IPostProcessor).IsAssignableFrom(t) && t.IsClass)
+                                .Select(t => (IPostProcessor)Activator.CreateInstance(t)!)
+                                .ToList();
+        }
+
+        /// <summary>
+        /// Renders the view with all post processors of all modules contributing to the output
+        /// </summary>
+        /// <param name="viewName"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<HtmlDocument> RenderView( string viewName, ContentRenderModel model)
+        {
+            var html = await RazorTemplateEngine.RenderAsync(viewName, model);
+
+            HtmlDocument document = new HtmlDocument();
+            document.LoadHtml(html);
+
+            foreach (var processor in _postProcessors)
+            {
+                processor.Process(model, document);
+            }
+
+            return document;
         }
 
         /// <summary>
@@ -126,8 +161,8 @@ namespace NC.WebEngine.Core.Content
                 ContentPage = pageToRender,
                 ContentPartHistory = parts.ToList(),
                 ContentParts = latestParts.ToDictionary( p => p.Name ),
-                ContentService = this,
                 VueModel = vueModelInstance,
+                HttpContext = ctx,
             };
         }
 

@@ -16,8 +16,6 @@ namespace NC.WebEngine.Core.Content
         /// </summary>
         public string SiteTitle { get; set; } = "Default Site";
 
-        private List<IPostProcessor> _postProcessors;
-
         public void Register(WebApplication app)
         {
             app.Configuration.Bind("ContentModule", this);
@@ -26,10 +24,6 @@ namespace NC.WebEngine.Core.Content
 
             app.MapGet("/{*url}", this.RenderView);
 
-            _postProcessors = Assembly.GetExecutingAssembly().GetTypes()
-                                .Where( t => typeof(IPostProcessor).IsAssignableFrom(t) && t.IsClass)
-                                .Select( t => (IPostProcessor)Activator.CreateInstance(t)! )
-                                .ToList();
         }
 
         private string ConvertPathToUrl( string path)
@@ -81,18 +75,9 @@ namespace NC.WebEngine.Core.Content
                 syncIoFeature.AllowSynchronousIO = true;
             }
 
-            var html = await RazorTemplateEngine.RenderAsync(contentRendererModel.ContentPage.View, contentRendererModel);
-
-            HtmlDocument document = new HtmlDocument();
-            document.LoadHtml(html);
-
-            foreach (var processor in _postProcessors)
-            {
-                processor.Process(contentRendererModel, document);
-            }
-
             ctx.Response.ContentType = "text/html";
 
+            var document = await contentService.RenderView(contentRendererModel.ContentPage.View, contentRendererModel);
             document.Save(ctx.Response.Body);
 
             await ctx.Response.CompleteAsync();

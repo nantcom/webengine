@@ -1,0 +1,64 @@
+﻿<style>
+    #ncweb-editorribbon a {
+        background: #fd7e14;
+        color: #fff;
+        text-decoration: none;
+        font-family: arial,sans-serif;
+        text-align: center;
+        font-weight: bold;
+        padding: 5px 40px;
+        font-size: 1rem;
+        line-height: 2rem;
+        position: relative;
+        transition: 0.5s;
+    }
+
+        #ncweb-editorribbon a:hover {
+            background: #c11;
+            color: #fff;
+        }
+
+        #ncweb-editorribbon a::before, #ncweb-editorribbon a::after {
+            content: "";
+            width: 100%;
+            display: block;
+            position: absolute;
+            top: 1px;
+            left: 0;
+            height: 1px;
+            background: #fff;
+        }
+
+        #ncweb-editorribbon a::after {
+            bottom: 1px;
+            top: auto;
+        }
+
+    @@media screen and (min-width:800px) {
+        #ncweb-editorribbon {
+            position: fixed;
+            display: block;
+            top: 0;
+            left: 0;
+            width: 260px;
+            overflow: hidden;
+            height: 260px;
+            z-index: 9999;
+        }
+
+            #ncweb-editorribbon a {
+                width: 260px;
+                position: absolute;
+                top: 30px;
+                left: -75px;
+                transform: rotate(-45deg);
+                -webkit-transform: rotate(-45deg);
+                -ms-transform: rotate(-45deg);
+                -moz-transform: rotate(-45deg);
+                -o-transform: rotate(-45deg);
+                box-shadow: 4px 4px 10px rgba(0,0,0,0.8);
+            }
+    }
+
+</style>
+<span id="ncweb-editorribbon"><a href="/__membership/signout">Leave Edit Mode</a></span>

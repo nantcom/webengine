@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Caching.Memory;
+using System.Security.Principal;
 
 namespace NC.WebEngine.Core.Membership;
 
@@ -69,7 +70,7 @@ public class LoginModule : IModule
             if (token != null)
             {
                 var cache = htx.RequestServices.GetRequiredService<IMemoryCache>();
-                htx.User = this.GetClaimsPrincipal(token, cache)!;
+                htx.User = this.GetUserFromToken(token, cache);
             }
 
             return next(htx);
@@ -94,10 +95,6 @@ public class LoginModule : IModule
             {
                 var message = htx.Request.Query["error_description"];
                 htx.Response.Cookies.Append(CookieKeys.GENERIC_SYSTEM_MESSAGE, message, new CookieOptions() { Expires = DateTimeOffset.Now.AddDays(-1) });
-            }
-            else
-            {
-                htx.User = this.GetClaimsPrincipal(token, htx.RequestServices.GetRequiredService<IMemoryCache>())!;
             }
 
             htx.Response.Headers["Location"] = htx.Request.Cookies[CookieKeys.LOGIN_BEFORE_LOGIN_URL] ?? "/";
@@ -136,56 +133,67 @@ public class LoginModule : IModule
 
     }
     
-    private ClaimsPrincipal? GetClaimsPrincipal( string token, IMemoryCache cache)
+    private ClaimsPrincipal? GetUserFromToken( string token, IMemoryCache cache)
     {
+        if (string.IsNullOrEmpty(token))
+        {
+            return null;
+        }
+
         var cached = cache.Get(token) as ClaimsPrincipal;
         if (cached != null)
         {
             return cached;
         }
 
-        var info = this.ApplyJwtToken(token);
-        if (info.user != null && info.validTo > DateTime.UtcNow)
-        {
-            cache.Set(token, info.user, new DateTimeOffset(info.validTo!.Value));
-            return info.user;
-        }
-
-        return null;
-    }
-
-    private (DateTime? validTo, ClaimsPrincipal? user) ApplyJwtToken(string token)
-    {
-        if (string.IsNullOrEmpty(token))
-        {
-            return (null, null);
-        }
-
         var handler = new JwtSecurityTokenHandler();
         var jwtToken = handler.ReadJwtToken(token);
 
-        if (  DateTime.UtcNow > jwtToken.ValidTo.AddMinutes(-1) )
+        if (jwtToken.ValidTo >= DateTime.UtcNow)
         {
-            return (jwtToken.ValidTo, null);
+            cache.Remove(token);
+            return null;
         }
 
-        if (DateTime.UtcNow < jwtToken.ValidFrom)
-        {
-            return (jwtToken.ValidTo, null);
-        }
-
+        ClaimsPrincipal? user = null;
         try
         {
             SecurityToken validatedToken;
-            var principal = handler.ValidateToken(token, this.OpenIdSettings.ValidationParameters, out validatedToken);
+            user = handler.ValidateToken(token, this.OpenIdSettings.ValidationParameters, out validatedToken);
 
-            return (jwtToken.ValidTo, principal);
+            // Add Roles from Roles Claim from Azure AD B2C
+            var rolesClaim = user.Claims.Where(item => item.Type == "extension_Roles").FirstOrDefault();
+            if (rolesClaim != null)
+            {
+                var roles = JsonSerializer.Deserialize<string[]>(rolesClaim.Value);
+                foreach (var role in roles)
+                {
+                    user.AddIdentity(new ClaimsIdentity(new[] { new Claim(ClaimTypes.Role, role) }));
+                    user.AddIdentity(new ClaimsIdentity(new[] { new Claim("roles", role) }));
+                }
+            }
+
+            // Add Roles from Azure AD Roles claim
+            rolesClaim = user.Claims.Where(item => item.Type == "roles").FirstOrDefault();
+            if (rolesClaim != null)
+            {
+                var roles = JsonSerializer.Deserialize<string[]>(rolesClaim.Value);
+                foreach (var role in roles)
+                {
+                    user.AddIdentity(new ClaimsIdentity(new[] { new Claim(ClaimTypes.Role, role) }));
+                    user.AddIdentity(new ClaimsIdentity(new[] { new Claim("roles", role) }));
+                }
+            }
+
         }
         catch (Exception e)
         {
         }
 
-        return (jwtToken.ValidTo, null);
+        // We made the cache expire slightly before token, so we can get a new one
+        cache.Set(token, user, new DateTimeOffset(jwtToken.ValidTo.AddSeconds(-20)));
+
+        return user;
     }
 
     private async Task<AzureADOpenIdSettings> ReadConfiguration(AzureADSettings settings)

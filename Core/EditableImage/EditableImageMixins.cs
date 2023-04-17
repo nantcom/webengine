@@ -1,4 +1,5 @@
 ﻿using NC.WebEngine.Core.Content;
+using NC.WebEngine.Core.Membership;
 using NC.WebEngine.Core.VueSync;
 
 namespace NC.WebEngine.Core.EditableImage
@@ -14,7 +15,7 @@ namespace NC.WebEngine.Core.EditableImage
 
         public bool WillInclude(ContentRenderModel renderModel)
         {
-            return true;
+            return renderModel.HttpContext.RequestServices.GetRequiredService<MembershipService>().IsEditor;
         }
     }
 }
