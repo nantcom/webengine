@@ -111,6 +111,19 @@
         "dist/editorjs-codeflask.bundle.js.LICENSE.txt",
         "dist/editorjs-codeflask.bundle.min.js"
       ]
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "jquery@3.6.4",
+      "destination": "wwwroot/js/jquery/",
+      "files": [
+        "dist/jquery.js",
+        "dist/jquery.min.js",
+        "dist/jquery.min.map",
+        "dist/jquery.slim.js",
+        "dist/jquery.slim.min.js",
+        "dist/jquery.slim.min.map"
+      ]
     }
   ]
 }

@@ -51,25 +51,6 @@ public class LoginModule : IModule
         public string n { get; set; }
     }
 
-    public class RBACSettings
-    {
-        public string SiteId { get; set; }
-
-        public string ClientId { get; set; }
-
-        public string ClientSecret { get; set; }
-
-        public string RoleAttribute { get; set; }
-
-        /// <summary>
-        /// If set, entry in the Role Claim array must include SiteId after underscore
-        /// for example ["Admin", "Editor"] would not grant Admin or Editor Role
-        /// but ["Admin_3c33258d-e8ee-477e-b94c-680fe0900f3f", "Editor"] will grant
-        /// Admin role for Site that has site Id 3c33258d-e8ee-477e-b94c-680fe0900f3f set in RBAC settings
-        /// </summary>
-        public bool IsUseSiteSpecificRole { get; set; }
-    }
-
     public AzureADSettings AzureADB2C { get; set; } = new();
     public AzureADOpenIdSettings OpenIdSettings = new();
     public RBACSettings RBAC { get; set; } = new();
@@ -83,7 +64,7 @@ public class LoginModule : IModule
 
         app.Use((htx, next) =>
         {
-            if (htx.Request.Headers.Accept.Any(s => s.Contains("text/html")) == false)
+            if (htx.Request.Headers.Accept.Any(s => s.Contains("text/html") || s.Contains("application/json")) == false)
             {
                 return next(htx);
             }

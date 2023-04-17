@@ -9,6 +9,7 @@ window.ncvuesync.callServer = async function (typeName, method, parameterArray) 
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json, text/text',
             },
             body: JSON.stringify(parameterArray),
         });
@@ -107,6 +108,7 @@ window.ncvuesync.generateVueSync = function (syncInfo) {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Accept': 'application/json, text/text',
                     },
                     body: JSON.stringify(toSend),
                 });

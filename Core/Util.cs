@@ -1,4 +1,9 @@
-﻿namespace NC.WebEngine.Core
+﻿using Microsoft.AspNetCore.Http.Features;
+using NC.WebEngine.Core.Content;
+using NC.WebEngine.Core.VueSync;
+using System.Reflection.Metadata;
+
+namespace NC.WebEngine.Core
 {
     public static class Util
     {
@@ -19,6 +24,40 @@
             }
 
             return default(TValue);
+        }
+
+        public static void MapPage<T>( this WebApplication app, string url, string title, string viewName)
+            where T : IVueModel
+        {
+            app.MapGet(url, async (HttpContext ctx) =>
+            {
+                var syncIoFeature = ctx.Features.Get<IHttpBodyControlFeature>();
+                if (syncIoFeature != null)
+                {
+                    syncIoFeature.AllowSynchronousIO = true;
+                }
+
+                var contentService = ctx.RequestServices.GetRequiredService<ContentService>();
+                var document = await contentService.RenderView(viewName, new ContentRenderModel()
+                {
+                    ContentPage = new ContentPage()
+                    {
+                        Url = url,
+                        View = viewName,
+                        Title = title,
+                    },
+                    HttpContext = ctx,
+                    Language = "",
+                    VueModel = (IVueModel?)Activator.CreateInstance(typeof(T))
+                });
+
+                ctx.Response.ContentType = "text/html";
+
+                document.Save(ctx.Response.Body);
+                
+
+                await ctx.Response.CompleteAsync();
+            });
         }
     }
 }
