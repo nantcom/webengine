@@ -16,39 +16,50 @@
         </h1>
     </div>
 
-    <div class="alert alert-warning mt-4">
-        <h4>Note the folloing information before proceeding</h4>
-        <b>Your Account:</b> @(Model.MembershipService.FullName)<br />
-        <b>Emails:</b> @(Model.MembershipService.Emails)<br />
-        <b>Current Token Admin Status:</b> {{model.IsAlreadyAdmin}}
-    </div>
+    <div v-if="model.IsAlreadyAdmin">
 
-    To proceed in making yourself an admin for this site. Please enter enroll key below:
-
-    <div class="input-group mt-3">
-        <span class="input-group-text" id="basic-addon1">Enroll Key</span>
-        <input type="text" class="form-control" placeholder="00000000-0000-0000-0000-000000000000"
-               v-model="model.EnrollKey">
-    </div>
-
-    <button class="btn btn-primary btn-lg mt-3"
-            v-on:click="Enroll">
-        Make Current Account an Admin
-        <div class="spinner-border text-light"
-             v-if="isBusy" role="status">
+        <div class="alert alert-warning mt-4">
+            Current user is already admin. If another user wishes to enroll, use this code:
+            <input type="text" class="form-control mt-2" readonly
+                   :value="model.EnrollKey">
         </div>
-    </button>
-
-
-    <div class="alert alert-success mt-4"
-         v-if="model.IsSuccess && isBusy == false ">
-        <h4>Success</h4>
-        You are now admin, please sign-out and sign-in again for the changes to take effect
     </div>
 
-    <div class="alert alert-danger mt-4"
-         v-if="model.IsSuccess == false && model.Message != null && isBusy == false">
-        <h4>Error</h4>
-        {{model.Message}}
+    <div v-if="model.IsAlreadyAdmin == false">
+
+        <div class="alert alert-warning mt-4">
+            <h4>Note the folloing information before proceeding</h4>
+            <b>Your Account:</b> @(Model.MembershipService.FullName)<br />
+            <b>Emails:</b> @(Model.MembershipService.Emails)<br />
+        </div>
+
+        To proceed in making yourself an admin for this site. Please enter enroll key below:
+
+        <div class="input-group mt-3">
+            <span class="input-group-text" id="basic-addon1">Enroll Key</span>
+            <input type="text" class="form-control" placeholder="00000000-0000-0000-0000-000000000000"
+                   v-model="model.EnrollKey">
+        </div>
+
+        <button class="btn btn-primary btn-lg mt-3"
+                v-on:click="Enroll">
+            Make Current Account an Admin
+            <div class="spinner-border text-light"
+                 v-if="isBusy" role="status">
+            </div>
+        </button>
+
+
+        <div class="alert alert-success mt-4"
+             v-if="model.IsSuccess && isBusy == false ">
+            <h4>Success</h4>
+            You are now admin, please sign-out and sign-in again for the changes to take effect
+        </div>
+
+        <div class="alert alert-danger mt-4"
+             v-if="model.IsSuccess == false && model.Message != null && isBusy == false">
+            <h4>Error</h4>
+            {{model.Message}}
+        </div>
     </div>
 </div>

@@ -6,10 +6,18 @@
 
         public void Register(WebApplication app)
         {
-            AdminModule.SelfEnrollKey = Guid.NewGuid().ToString();
-            File.WriteAllText("selfenrollkey.txt", AdminModule.SelfEnrollKey);
+            if (app.Configuration.GetSection(ConfigKeys.RBAC).Exists() == false)
+            {
+                app.Services.GetService<ILogger>().LogWarning("There is no configuration for Role Based Access Control, Managing user role is not available.");
+            }
+            else
+            {
+                AdminModule.SelfEnrollKey = Guid.NewGuid().ToString();
+                File.WriteAllText("selfenrollkey.txt", AdminModule.SelfEnrollKey);
 
-            app.MapPage<AdminEnrollVueModel>("/__admin/selfenroll", "Self Enroll", "SystemViews/Admin/SelfEnroll");
+                app.MapPage<AdminEnrollVueModel>("/__admin/selfenroll", "Self Enroll", "SystemViews/Admin/SelfEnroll");
+            }
+
         }
     }
 }

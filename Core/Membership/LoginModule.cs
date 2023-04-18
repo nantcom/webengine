@@ -57,6 +57,12 @@ public class LoginModule : IModule
 
     public void Register(WebApplication app)
     {
+        if (app.Configuration.GetSection(ConfigKeys.AzureADB2C).Exists() == false)
+        {
+            app.Services.GetService<ILogger>().LogWarning("There is no configuration for AzureAD B2C, Login Module does not initialized");
+            return;
+        }
+
         app.Configuration.Bind(ConfigKeys.AzureADB2C, this.AzureADB2C);
         app.Configuration.Bind(ConfigKeys.RBAC, this.RBAC);
 

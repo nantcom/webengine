@@ -37,6 +37,9 @@ namespace NC.WebEngine.Core
                     syncIoFeature.AllowSynchronousIO = true;
                 }
 
+                var vueModel = (IVueModel?)Activator.CreateInstance(typeof(T));
+                vueModel.OnCreated(ctx);
+
                 var contentService = ctx.RequestServices.GetRequiredService<ContentService>();
                 var document = await contentService.RenderView(viewName, new ContentRenderModel()
                 {
@@ -48,7 +51,7 @@ namespace NC.WebEngine.Core
                     },
                     HttpContext = ctx,
                     Language = "",
-                    VueModel = (IVueModel?)Activator.CreateInstance(typeof(T))
+                    VueModel = vueModel
                 });
 
                 ctx.Response.ContentType = "text/html";

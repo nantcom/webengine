@@ -44,6 +44,7 @@ namespace NC.WebEngine.Core.Admin
         public void OnCreated(HttpContext ctx)
         {
             this.IsAlreadyAdmin = ctx.RequestServices.GetRequiredService<MembershipService>().IsAdmin;
+            this.EnrollKey = AdminModule.SelfEnrollKey;
         }
 
         public void OnPostback(HttpContext ctx)
