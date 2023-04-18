@@ -13,6 +13,8 @@ namespace NC.WebEngine.Core.Admin
 
         public bool IsAlreadyAdmin { get; set; }
 
+        public bool IsLoggedIn { get; set; }
+
         private MembershipService _membershipService;
 
         [VueSyncMethod(
@@ -33,6 +35,8 @@ namespace NC.WebEngine.Core.Admin
                 _membershipService.EnrollUserAsAdmin().Wait();
                 this.IsSuccess = true;
                 this.Message = null;
+
+                AdminModule.RegenerateSelfEnrollKey();
             }
             catch (Exception ex)
             {
@@ -43,8 +47,15 @@ namespace NC.WebEngine.Core.Admin
 
         public void OnCreated(HttpContext ctx)
         {
-            this.IsAlreadyAdmin = ctx.RequestServices.GetRequiredService<MembershipService>().IsAdmin;
-            this.EnrollKey = AdminModule.SelfEnrollKey;
+            var membership = ctx.RequestServices.GetRequiredService<MembershipService>();
+            this.IsLoggedIn = membership.IsAnonymous == false;
+            this.IsAlreadyAdmin = membership.IsAdmin;
+
+            if (this.IsAlreadyAdmin)
+            {
+                AdminModule.RegenerateSelfEnrollKey();
+                this.EnrollKey = AdminModule.SelfEnrollKey;
+            }
         }
 
         public void OnPostback(HttpContext ctx)

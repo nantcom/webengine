@@ -16,6 +16,18 @@
         </h1>
     </div>
 
+
+    <div v-if="model.IsLoggedIn == false">
+
+        <div class="alert alert-warning mt-4">
+            You must Login first.
+            <br/>
+            <a class="btn btn-primary btn-lg mt-4" href="/__membership/signin?next=/__admin/selfenroll">
+                Login
+            </a>
+        </div>
+    </div>
+
     <div v-if="model.IsAlreadyAdmin">
 
         <div class="alert alert-warning mt-4">
@@ -25,7 +37,7 @@
         </div>
     </div>
 
-    <div v-if="model.IsAlreadyAdmin == false">
+    <div v-if="model.IsLoggedIn && model.IsAlreadyAdmin == false">
 
         <div class="alert alert-warning mt-4">
             <h4>Note the folloing information before proceeding</h4>
