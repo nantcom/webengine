@@ -11,6 +11,10 @@ window.ncblockeditor.mixin = function (vueModelInstance, pageId) {
     var currentMounted = vueModelInstance.mounted;
     var editorMounted = function () {
 
+        if ($("#ncweb_toolbar").length == 0) {
+            $('<div id="ncweb_toolbar"></div>').appendTo('body');
+        }
+
         $('head').append('<link rel="stylesheet" type="text/css" href="/css/ncweb/editor.css">');
 
         $("*[ncweb-blockcontent]").each(function () {
@@ -144,7 +148,7 @@ window.ncblockeditor.mixin = function (vueModelInstance, pageId) {
 
                 $("#prismcss").remove();
 
-            }).appendTo('body');
+            }).appendTo('#ncweb_toolbar').hide();
 
             previewButton.click(async function () {
 
@@ -166,9 +170,9 @@ window.ncblockeditor.mixin = function (vueModelInstance, pageId) {
                 previewButton.hide();
                 editButton.fadeIn();
 
-            }).appendTo('body');
+            }).appendTo('#ncweb_toolbar');
 
-
+            window.ncblockeditor.editor = editor;
         });
     };
 

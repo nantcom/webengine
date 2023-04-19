@@ -180,6 +180,14 @@ namespace NC.WebEngine.Core.Content
                             .Result();
         }
 
+        public ContentPage? GetContentPaage(int id)
+        {
+            return _db!.Connection.LinqTo<ContentPage>()
+                            .Where(x => x.Id == id)
+                            .Result()
+                            .FirstOrDefault();
+        }
+
         public ContentPage CreatePage( string baseUrl )
         {
             var contentPage = new ContentPage();
@@ -242,6 +250,39 @@ namespace NC.WebEngine.Core.Content
             }
 
             return page;
+        }
+
+        public void ChangePageUrl( int pageId, string newUrl )
+        {
+            if (this.StandardPages.Any( p => p.Url == newUrl ))
+            {
+                throw new Exception("URL is reserved for standard page");
+            }
+
+            var page = this.GetPageById(pageId);
+
+            var exist = _db!.Connection.LinqTo<ContentPage>()
+                            .Where(page => page.Url == newUrl)
+                            .Result()
+                            .FirstOrDefault();
+
+            if (exist != null)
+            {
+                throw new Exception("Page with same url exists");
+            }
+
+            bool isStandardPage = this.StandardPages.Any(p => p.Url == page.Url);
+            if (isStandardPage)
+            {
+                var parts = page.Url.Split('/');
+                if (parts.Length == 1) {
+
+                    throw new Exception("URL is standard page and cannot be changed");
+                }
+            }
+
+            page.Url = newUrl;
+            _db!.Connection.Upsert(page);
         }
 
         /// <summary>

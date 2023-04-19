@@ -41,8 +41,12 @@ namespace NC.WebEngine.Core.Editor
 
             }
 
+            var escaped = savedData.Content
+                            .Replace("<script", "&#60;script")
+                            .Replace("script>", "script&gt;"); ;
+
             return @$"
-                window.ncblockeditor.data = {savedData.Content};
+                window.ncblockeditor.data = {escaped};
                 window.ncblockeditor?.mixin?.({vueSyncVariableName}, {renderModel.ContentPage.Id});";
 
         }

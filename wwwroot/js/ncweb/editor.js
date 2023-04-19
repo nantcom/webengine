@@ -16,6 +16,28 @@ window.nceditor.editormixin = function (vueModelInstance, pageId) {
         var $savedCheck = $('<div class="ncweb_saved"></div>');
         $savedCheck.appendTo('body');
 
+        if ($("#ncweb_toolbar").length == 0) {
+            $('<div id="ncweb_toolbar"></div>').appendTo('body');
+        }
+
+        var changePageUrlButton = $('<div class="ncweb_floatingbutton changelink"></div>');
+        changePageUrlButton.click(async function () {
+
+            var slugified = await window.ncvuesync.callServer("NC.WebEngine.Core.Editor.EditorVueModel", "Slugify", parseInt(pageId));
+            var newslug = prompt("Enter new URL Slug for this page", slugified.data);
+
+            if (newslug != null) {
+                var response = await window.ncvuesync.callServer("NC.WebEngine.Core.Editor.EditorVueModel", "ChangeSlug", {
+                    id: parseInt(pageId),
+                    slug: newslug
+                });
+
+                alert(response.data.Message);
+            }
+
+        }).appendTo("#ncweb_toolbar");
+
+
         $("*[ncweb-contentpart]").each(function () {
 
             var me = $(this);
@@ -35,7 +57,9 @@ window.nceditor.editormixin = function (vueModelInstance, pageId) {
 
             var editButton = $('<div class="ncweb_button edit">');
 
-            var handleEdit = function () {
+            var handleEdit = function (event) {
+
+                event.stopPropagation();
 
                 var currentButton = $(this);
                 $(".ncweb_button.edit").css("visibility", "hidden");
@@ -90,7 +114,7 @@ window.nceditor.editormixin = function (vueModelInstance, pageId) {
 
                     $(".ncweb_button.edit").css("visibility", "visible");
 
-                }).appendTo('body');
+                }).appendTo('#ncweb_toolbar');
 
                 cancelButton.click(async function () {
 
@@ -105,7 +129,7 @@ window.nceditor.editormixin = function (vueModelInstance, pageId) {
 
                     $(".ncweb_button.edit").css("visibility", "visible");
 
-                }).appendTo('body');
+                }).appendTo('#ncweb_toolbar');
 
                 editButton.remove();
             };
@@ -115,6 +139,7 @@ window.nceditor.editormixin = function (vueModelInstance, pageId) {
             editButton.click(handleEdit);
 
         });
+
     }
 
     vueModelInstance.mounted = function () {

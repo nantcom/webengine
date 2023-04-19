@@ -2,6 +2,7 @@
 using NC.WebEngine.Core.Content;
 using NC.WebEngine.Core.VueSync;
 using System.Reflection.Metadata;
+using System.Text;
 
 namespace NC.WebEngine.Core
 {

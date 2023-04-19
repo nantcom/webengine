@@ -57,8 +57,7 @@ namespace NC.WebEngine.Core.Content.PostProcessors
 
         public void Process(ContentRenderModel renderModel, HtmlDocument document)
         {
-            bool includeEditor = true; // TODO: Make only authorized users have includeEditor rights
-            if (includeEditor)
+            if (renderModel.MembershipService.IsEditor)
             {
                 if (renderModel.VueModel == null)
                 {

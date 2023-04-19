@@ -3,6 +3,7 @@ using NC.WebEngine.Core.Content;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+using System.Web;
 
 namespace NC.WebEngine.Core.BlockEditor
 {
@@ -84,23 +85,10 @@ namespace NC.WebEngine.Core.BlockEditor
         {
             var imageData = JsonSerializer.Deserialize<ImageData>(blockData.ToJsonString());
             var bordered = imageData.withBorder ? "bordered" : "";
+            var stretched = imageData.stretched ? "stretched" : "";
+            var backgrounded = imageData.withBackground ? "backgrounded" : "";
 
-            if (imageData.stretched)
-            {
-                return $"<div><img src=\"{imageData.file.url}\" width=\"100%\" class=\"{bordered}\" /></div>";
-            }
-            else
-            {
-                if (imageData.withBackground)
-                {
-                    return $"<div style=\"background-image:url('{imageData.file.url}');\" class=\"ncweb-imageblock\"></div>";
-                }
-                else
-                {
-                    return $"<div><img src=\"{imageData.file.url}\" class=\"{bordered}\" /></div>";
-                }
-            }
-
+            return $"<div class=\"ncweb-imageblock {stretched} {bordered} {backgrounded}\"><img src=\"{imageData.file.url}\" /></div>";
         }
 
         private string RenderParagraph(string blockId, JsonObject blockData, RenderContext ctx)
@@ -132,6 +120,7 @@ namespace NC.WebEngine.Core.BlockEditor
         {
             var language = blockData["language"].ToString();
             var showlinenumbers = blockData["showlinenumbers"].ToString();
+            var code = HttpUtility.HtmlEncode(blockData["code"].ToString());
 
             ctx.AdditionalScripts.Add("/js/prism/prism.js");
             ctx.InitCodes.Add(@$"
@@ -144,7 +133,7 @@ if (!document.getElementById('prismcss')) {{
 }}
 ");
 
-            return $"<pre><code class=\"language-{language}\">{blockData["code"]}</code></pre>";
+            return $"<pre><code class=\"language-{language}\">{code}</code></pre>";
         }
     }
 }

@@ -26,7 +26,8 @@
 </div>
 
 <!-- Section / Blog -->
-<section id="blog" class="section">
+<section id="blog" class="section"
+         ncweb-editablecollection="/blog">
 
     <div class="container-fluid container-custom clearfix">
         <!-- Main -->
@@ -34,17 +35,20 @@
             <div class="row masonry">
                 <div class="masonry-sizer col-sm-6 col-xs-12"></div>
 
-                @foreach (var page in this.Model.ContentService.GetPagesUnder("/blog"))
+                @foreach (var page in this.Model.ContentService.GetPagesUnder("/blog").OrderByDescending(p=>p.Created))
                 {
                     <div class="masonry-item col-sm-6 col-xs-12">
                         <!-- Post - Item -->
-                        <article class="post item">
+                        <article class="post item"
+                                 ncweb-collectionitem itemid="@(page.Id)">
                             <div class="post-image">
                                 <img src="/assets/img/posts/post01.jpg" alt=""
                                      ncweb-editableimage="/images/blog/@(page.Id)/list.png">
                             </div>
                             <div class="post-content">
-                                <span class="date text-muted">
+                                <span class="date text-muted"
+                                      ncweb-itemdate="@(page.Created.ToUnixTimeMilliseconds())"
+                                      ncweb-itemdateformat="dd MMMM yyyy">
                                     @(page.Created.ToString("d MMMM yyyy"))
                                 </span>
                                 <h4>
