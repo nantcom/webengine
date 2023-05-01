@@ -1,121 +1,115 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Title goes here</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
 
-    <!-- Title -->
-    <title>Skill - Modern &amp; Creative HTML5 Template</title>
+    <link rel="stylesheet" href="/theme/css/main.css">
 
-    <!-- Favicons -->
-    <link rel="shortcut icon" href="/assets/img/favicon.png">
-    <link rel="apple-touch-icon" href="/assets/img/favicon_60x60.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="/assets/img/favicon_76x76.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="/assets/img/favicon_120x120.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="/assets/img/favicon_152x152.png">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@200;400;700&family=Prompt:wght@200;400;700;900&display=swap" rel="stylesheet">
 
-    <!-- CSS Styles -->
-    <link rel="stylesheet" href="/assets/css/styles.css" />
-
-    <!-- CSS Base -->
-    <link id="theme" rel="stylesheet" href="/assets/css/themes/theme-orange.min.css" />
-
-    <link href="/css/style.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/style.min.css">
 </head>
-
-<body class="one-page header-vertical">
-
-    <!-- Loader -->
-    <div id="page-loader" class="bg-dark dark">
-        <svg class="loader" width="32px" height="32px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle class="circle" fill="none" stroke-width="2" stroke-linecap="round" cx="16" cy="16" r="14"></circle></svg>
-        <span class="loading-txt text-muted">Loading...</span>
-    </div>
-    <!-- Loader / End -->
-    <!-- Header -->
-    <header id="header" class="dark">
-
-        <!-- Logo -->
-        <a href="/" class="logo">
-            <img src="/assets/img/logo-light.svg" alt="">
-        </a>
-
-        <!-- Navigation -->
-        <nav id="main-menu">
-            <div class="nav-wrapper">
-                @RenderSection("Menu")
-            </div>
-            <span class="selector"></span>
-        </nav>
-
-        <!-- Bottom -->
-        <div class="bottom">
-            <ul class="list-inline mb-10">
-                <li class="list-inline-item"><a href="#" class="icon icon-circle icon-hover icon-facebook icon-sm"><i class="ti-facebook"></i></a></li>
-                <li class="list-inline-item"><a href="#" class="icon icon-circle icon-hover icon-twitter icon-sm"><i class="ti-twitter-alt"></i></a></li>
-                <li class="list-inline-item"><a href="#" class="icon icon-circle icon-hover icon-google icon-sm"><i class="ti-google"></i></a></li>
-            </ul>
-            <span class="text-muted">Copyright Skill 2016©. Made by Suelo.</span>
+<body>
+    <div class="loader">
+        <div class="spinner">
+            <div class="double-bounce1"></div>
+            <div class="double-bounce2"></div>
         </div>
-
-    </header>
-    <!-- Header / End -->
-    <!-- Content -->
-    <div id="content">
-
-
-        @RenderBody()
-
     </div>
-    <!-- Content / End -->
-    <!-- Footer -->
-    <footer id="footer" class="dark bg-dark">
-        <div class="container-fluid container-custom">
-            <div class="row">
-                <div class="col-xl-5 text-xl-left text-xs-center">
-                    <div class="module-group">
-                        <div class="module copyright">
-                            <a href="http://nant.co" class="logo mr-15"><img src="assets/img/logo-light.svg" height="80" alt=""></a>
-                            <span class="text-muted">Copyright &copy; @(DateTime.Now.Year). Made by <a href="http://opulento.site/" target="blank">Opulento Engine</a>.</span>
-                        </div>
+    <!-- header, page nav-->
+    <header class="header">
+        <div class="header-inner">
+            <div class="header-logo">
+                <img src="" width="30" nocrop
+                     ncweb-editableimage="/images/logo-small.png" />
+            </div>
+            <div class="container">
+                <div class="header-cnt js-header-cnt">
+                    <div class="header-cnt-top">
+
+                        @RenderSection("Nav")
+
                     </div>
-                </div>
-                <div class="col-xl-7 text-xl-right text-xs-center">
-                    <div class="module-group">
-                        <div class="module">
+                    <div class="header-contacts">
+                        <!-- social media-->
+                        <div class="social">
+                            <ul class="social-list">
+                                <li class="social-item"><a class="social-link" href="#"><i class="svg-image-facebook"></i></a></li>
+                                <li class="social-item"><a class="social-link" href="#"><i class="svg-image-instagram"></i></a></li>
+                                <li class="social-item"><a class="social-link" href="#"><i class="svg-image-linkedin"></i></a></li>
+                            </ul>
                         </div>
-                        <div class="module">
-                            <span class="text-muted mr-10">Follow Us</span>
-                            <a href="https://www.facebook.com/NantComCoLtd" class="icon icon-circle icon-hover icon-facebook icon-sm"><i class="ti-facebook"></i></a>
-                        </div>
+                        <span class="header-contacts__link"
+                              ncweb-contentpageid="1"
+                              ncweb-contentpart="Telephone">
+                            +669 8259 1133
+                        </span>
+                        <p class="header-contacts__copyright">
+                            &copy;
+                            <span ncweb-contentpageid="1"
+                                  ncweb-contentpart="Copyright">
+                                NantCom Co., Ltd.
+                            </span>
+                            @(DateTime.Now.Year).
+
+                        </p>
                     </div>
                 </div>
             </div>
+            <a class="header-contacts__link header-phone" href="tel:+66982591133">
+                +669 8259 1133
+            </a>
+            <div class="header-burger js-header-burger">
+                <div class="header-burger-inner"><span class="header-burger-line"></span><span class="header-burger-line"></span><span class="header-burger-line"></span></div>
+            </div>
+        </div>
+    </header>
+    <!-- social media-->
+    <div class="social">
+        <ul class="social-list">
+            <li class="social-item"><a class="social-link" href="#"><i class="svg-image-facebook"></i></a></li>
+            <li class="social-item"><a class="social-link" href="#"><i class="svg-image-instagram"></i></a></li>
+            <li class="social-item"><a class="social-link" href="#"><i class="svg-image-linkedin"></i></a></li>
+        </ul>
+    </div>
+    <!-- Page content-->
+    <main class="main">
+        <div class="sections-wrap">
+
+
+            <div class="sections js-sections">
+
+            @RenderBody()
+
+            </div>
+            <div class="section-scroll js-section-scroll"></div>
+
+
+        </div>
+    </main>
+    <!-- footer-->
+    <footer class="footer">
+        <div class="container-fluid">
+            <p class="footer-copyright">
+                &copy; @(DateTime.Now.Year)
+                <span ncweb-contentpageid="1"
+                      ncweb-contentpart="Copyright">
+                    NantCom Co., Ltd.
+                </span>
+            </p>
+            <a class="top-arrow" href="#"><i class="svg-image-arrow-top"></i></a>
         </div>
     </footer>
-    <!-- Footer / End -->
-
-    <!-- Mobile Navigation Toggle -->
-    <div id="mobile-nav-toggle" class="header-dark"><span></span><span></span><span></span></div>
-
-    <!-- Notification Bar -->
-    <div id="notification-bar"></div>
-
-    <!-- JS Libraries -->
-    <script src="/assets/js/jquery-2.2.4.min.js"></script>
-
-    <!-- JS Plugins -->
-    <script src="/assets/js/plugins.js"></script>
-
-    <!-- JS Core -->
-    <script src="/assets/js/core.js"></script>
-
-    <!-- JS Google Map -->
-    <script src="https://maps.googleapis.com/maps/api/js"></script>
-
+    <script src="/theme/js/jquery.min.js"></script>
+    <script src="/theme/js/bootstrap.bundle.min.js"></script>
+    <script src="/theme/js/jquery.magnific-popup.min.js"></script>
+    <script src="/theme/js/jquery.pagepiling.min.js"></script>
+    <script src="/theme/js/jquery.validate.min.js"></script>
+    <script src="/theme/js/swiper-bundle.min.js"></script>
+    <script src="/theme/js/main.js"></script>
 </body>
-
 </html>

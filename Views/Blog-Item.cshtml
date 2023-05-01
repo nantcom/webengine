@@ -8,55 +8,47 @@
     Layout = "Theme.cshtml";
 }
 
-@section Menu {
+@section Nav
+    {
 
-    <ul class="nav nav-primary">
-        <li><a href="@(Model.ContentPage.Url)" class="active"><i class="li-pen"></i>
-            <span ncweb-contentpart="Title"
-                  readonly></span>    
-        </a>
-        </li>
-        <li><a href="/blog"><i class="li-pen"></i>Blog</a></li>
-        <li><a href="/"><i class="li-home"></i>Back to Start</a></li>
-    </ul>
+    <nav class="header-nav">
+        <ul class="nav-list" id="navbar">
+            <li class="nav-item" data-menuanchor="home"><a class="nav-link" href="/#home">home</a></li>
+            <li class="nav-item" data-menuanchor="about"><a class="nav-link" href="/#about">about</a></li>
+            <li class="nav-item" data-menuanchor="projects"><a class="nav-link" href="/#projects">portfolio</a></li>
+            <li class="nav-item" data-menuanchor="blogs"><a class="nav-link" href="/#blogs">blogs</a></li>
+        </ul>
+
+    </nav>
 }
 
-<div class="container container-md">
-    <!-- BG Side -->
-    <div class="bg-side bg-left">
-        <img src="/assets/img/items/glasses.png" alt="" class="mb-100">
-        <img src="/assets/img/items/coffee.png" alt="">
-    </div>
-
-    <!-- BG Side -->
-    <div class="bg-side bg-right">
-        <img src="/assets/img/items/plant.png" alt="">
-    </div>
-
-    <!-- Post / Single -->
-    <article class="post single">
-        <nav class="post-nav btn-group">
-            <a href="#" class="btn btn-secondary btn-sm"><i class="ti-angle-left"></i></a>
-            <a href="#" class="btn btn-secondary btn-sm"><i class="ti-layout-grid2"></i></a>
-            <a href="#" class="btn btn-secondary btn-sm"><i class="ti-angle-right"></i></a>
-        </nav>
-        <span class="date text-muted">
-            @(Model.ContentPage.Created.ToString("d MMMM yyyy"))
-        </span>
-        <h1 class="post-title"
-            ncweb-contentpart="Title">
-            Road to success
-        </h1>
-        <ul class="post-meta">
-            <li><i class="li-feedback"></i>- feedback</li>
-        </ul>
-        <div class="post-image">
-            <img src="/assets/img/posts/post01.jpg" alt=""
-                 ncweb-editableimage="/images/blog/@(Model.ContentPage.Id)/Intro.png">
+<div class="hero-inner hero-blog">
+    <div class="hero-inner-cnt js-hero" style="background-image: url(https://picsum.photos/id/57/1920/1080)">
+        <div class="container">
+            <h1 class="hero-inner__title anuphan"
+                ncweb-contentpart="Title">
+            </h1>
         </div>
-        <div class="post-content"
-             ncweb-blockcontent>
-        </div>
-
-    </article>
+    </div>
 </div>
+
+
+<section class="blog">
+    <div class="container">
+        <div class="row blog-block">
+            <p class="blog-date"
+               ncweb-itemdate="@(this.Model.ContentPage.Created.ToUnixTimeMilliseconds())"
+               ncweb-itemdateformat="dd MMMM yyyy">
+                @(this.Model.ContentPage.Created.ToString("d MMMM yyyy"))
+            </p>
+            <div class="blog-txt anuphan"
+                 ncweb-blockcontent>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.getElementsByTagName("html")[0].classList.add("inner-page");
+    document.getElementsByTagName("body")[0].classList.add("inner-page");
+</script>

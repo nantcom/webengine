@@ -1,32 +1,126 @@
-h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6,
-body, table, .btn, a, .price-table .btn-bottom, #footer .module, .nav-primary li > a {
-    font-family: 'Anuphan';
+@gold: #FDE3A7;
+
+.header {
+    text-shadow: 0 0 20px black;
 }
 
-html, body, table, p, div, .btn {
-    font-weight: 400 !important;
+.anuphan, .anuphan * {
+    font-family: Anuphan !important;
+}
+
+.header-contacts__link a {
+    color: @gold;
+}
+
+h3.services-subtitle {
+    margin-bottom: 50px;
+    font-weight: 700;
+}
+
+.services-title, .pi-item__title {
+    color: lighten(@gold, 10%);
+}
+
+.services-item__title {
+    font-family: "NeueMontreal-Medium" !important;
+    margin-bottom: 14px;
+    font-size: 110%;
+    color: lighten(@gold, 10%);
+}
+
+.projects-list__img img {
+    height: 80%;
+    width: auto;
+}
+
+.content-marquee {
+    > div {
+        display: flex;
+
+        div {
+            align-self: center;
+        }
+    }
+}
+
+.hero.section-inner {
+    position: relative;
+    overflow: hidden;
+
+    video {
+        min-width: 100%;
+        min-height: 100%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+    }
+}
+
+.news-item {
+    margin-bottom: 25px;
+}
+
+.footer {
+    background: linear-gradient(0deg, rgba(15,15,15,1) 0%, rgba(15,15,15,0) 100%);
+    padding-top: 30px;
+}
+
+.header {
+    backdrop-filter: blur(5px);
+    -webkit-mask-image: linear-gradient(0deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 20%);
+}
+
+.inner-page {
+
+    .header {
+        background: linear-gradient(180deg, rgba(15,15,15,1) 0%, rgba(15,15,15,0) 100%);
+    }
+}
+
+.projects-list__txt {
+
+    text-shadow: 0 0 20px black;
+
+    & > a {
+        font-size: 18px;
+        display: block;
+        color: @gold;
+    }
+}
+
+.hero-blog {
+
+    .hero-inner__title {
+        font-weight: 700;
+        text-shadow: 0 0 30px black;
+    }
+}
+
+.blog-txt {
     font-size: 18px;
-    line-height: 145%;
-}
 
-.blockquote p {
-    font-size: 1.5rem;
-}
+    .figure {
+        position: relative;
+        padding: 0;
+        display: block;
+        text-align: center;
+        box-shadow: 0 0 30px inset rgba(0,0,0,0.1);
+        overflow: hidden;
+        background-color: #eee;
 
-.feature {
-    .icon {
-        width: 70px;
-        margin-bottom: 18px;
+        img {
+            width: 100%;
+            margin: 0;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+
+        figcaption {
+            position: absolute;
+            right: 10px;
+            bottom: 10px;
+        }
     }
-
-    h5 {
-        margin-bottom: 14px !important;
-    }
-}
-
-.price-table .btn-bottom {
-    font-size: 20px;
-    font-weight: 400;
 }
 
 [ncweb-blockcontent], [ncweb-blockcontent] #preview {
@@ -67,4 +161,16 @@ html, body, table, p, div, .btn {
             box-shadow: 0 0 20px black;
         }
     }
+}
+
+.ce-popover__item {
+
+    * {
+        color: #0f0f0f !important;
+    }
+}
+
+
+.ce-toolbar__actions {
+    background-color: white;
 }

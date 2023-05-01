@@ -5,433 +5,163 @@
 @{
     Layout = "Theme.cshtml";
 }
+
 @model ContentRenderModel
 
-@section Menu {
+@section Nav
+{
 
-    <ul class="nav nav-primary">
-        <li><a href="#home"><i class="li-home"></i>Start</a></li>
-        <li><a href="#about"><i class="li-feedback"></i>About me</a></li>
-        <li><a href="#portfolio"><i class="li-imac"></i>Portfolio</a></li>
-        <li><a href="#latest-posts"><i class="li-pen"></i>Latest posts</a></li>
-        <li><a href="#prices"><i class="li-moneybag"></i>Pricing</a></li>
-        <li><a href="#contact"><i class="li-email"></i>Contact</a></li>
-    </ul>
+    <nav class="header-nav">
+        <ul class="nav-list" id="navbar">
+            <li class="nav-item" data-menuanchor="home"><a class="nav-link" href="/#home">home</a></li>
+            <li class="nav-item" data-menuanchor="about"><a class="nav-link" href="/#about">about</a></li>
+            <li class="nav-item" data-menuanchor="projects"><a class="nav-link" href="/#projects">portfolio</a></li>
+            <li class="nav-item" data-menuanchor="blogs"><a class="nav-link" href="/#blogs">blogs</a></li>
+        </ul>
+    </nav>
 }
 
-<!-- Section / Home -->
-<section id="home" class="section fullheight text-xs-center">
 
-    <!-- BG Image -->
-    <div class="bg-image bg-fixed"><img src="assets/img/photos/agency_bg01.jpg" alt=""></div>
+<section class="section pp-scrollable" id="home">
+    <div class="hero section-inner">
+        <video autoplay muted loop>
+            <source src="/images/NantCom-Hero1-750k.mp4" type="video/mp4" />
+        </video>
 
-    <div class="v-center container-fluid container-custom">
-        <h1 class="display-1 mb-40"
-            ncweb-contentpart="Hero">
-            Your visions, now.
-        </h1>
-        <div class="btn-group" data-local-scroll>
-            <a href="#about" class="btn btn-secondary">
-                เกี่ยวกับเรา
-            </a>
+        <div class="container section-cnt">
+            <div class="row">
+                <div class="col-lg-8">
 
-            <a href="#portfolio" class="btn btn-primary">
-                ผลงาน
-            </a>
+                    <h1 class="h1 hero-title">
+                        <img src="" height="192" width="192"
+                             style="position:relative; top: 20px"
+                             ncweb-editableimage="/images/logo-hero.png" nocrop="" />
+                        NantCom
+                    </h1>
+                    <p class="hero-txt" style="position:relative; left: 8px">
+                        We build Cloud-First Software Systems, <br />
+                        AI/ML-powered Solutions, and <br />
+                        High Performance Laptops.
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
-
 </section>
 
-<!-- Section / About -->
-<section id="about" class="section">
-
-    <div class="container container-sm">
-
-        <!-- BG Side -->
-        <div class="bg-side bg-left">
-            <img src="/assets/img/items/glasses2.png" alt="" class="mr-70">
-        </div>
-
-        <!-- BG Side -->
-        <div class="bg-side bg-right">
-            <img src="/assets/img/items/plant2.png" alt="">
-            <img src="/assets/img/items/ipad.png" alt="">
-        </div>
-
-        <div ncweb-contentpart="AboutAndService">
-
-            <h2>About Us</h2>
-            <p class="lead">
-                Aliquam laoreet maximus tellus vitae mollis. Morbi quis dolor dignissim, pellentesque eros sit amet, dictum velit.
-            </p>
-            <p>
-                Vivamus molestie sit amet lectus non commodo. Praesent in dignissim lectus, eu suscipit diam. Donec vitae turpis dictum, eleifend ipsum sed, tincidunt justo.
-            </p>
-            <div class="blockquotes">
-                <!-- Blockquote -->
-                <blockquote class="blockquote animated" data-animation="fadeInLeft">
-                    <p>The best photography experience ever...</p>
-                    <footer>
-                        <img src="assets/img/avatars/avatar01.jpg" alt="">
-                        <span class="name">Mark Johnson<span class="text-muted">, Google</span></span>
-                    </footer>
-                </blockquote>
-                <!-- Blockquote -->
-                <blockquote class="blockquote blockquote-primary animated" data-animation="fadeInRight" data-animation-delay="300">
-                    <p>She's awesome!</p>
-                    <footer>
-                        <img src="assets/img/avatars/avatar03.jpg" alt="">
-                        <span class="name">Kate Hudson<span class="text-muted">, LinkedIn</span></span>
-                    </footer>
-                </blockquote>
-            </div>
-
-            <h4 class="mt-60">Our team</h4>
+<section class="section" id="about">
+    <div class="services section-inner"
+         ncweb-editablebackground="/images/layout/home-experience.png">
+        <div class="container section-cnt">
             <div class="row">
-                <div class="col-sm-6">
-                    <img src="assets/img/avatars/avatar01.jpg" alt="" class="img-circle mb-20">
-                    <h5 class="mb-5">Mary Doe</h5>
-                    <h6 class="text-muted">CEO / Founder</h6>
+                <div class="col-lg-3">
+                    <h2 class="h2 services-title">
+                        <span class="mark">
+                            @(DateTime.Now.Year - 2011)
+                        </span>
+                        <span class="txt">Years<br> of <br>Pure Creations</span>
+                    </h2>
                 </div>
-                <div class="col-sm-6">
-                    <img src="assets/img/avatars/avatar02.jpg" alt="" class="img-circle mb-20">
-                    <h5 class="mb-5">Johnatan Doe</h5>
-                    <h6 class="text-muted">Project Manager</h6>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <img src="assets/img/avatars/avatar03.jpg" alt="" class="img-circle mb-20">
-                    <h5 class="mb-5">Mark Johnson</h5>
-                    <h6 class="text-muted">Designer</h6>
-                </div>
-                <div class="col-sm-6">
-                    <img src="assets/img/avatars/avatar04.jpg" alt="" class="img-circle mb-20">
-                    <h5 class="mb-5">Gary Park</h5>
-                    <h6 class="text-muted">Developer</h6>
-                </div>
-            </div>
-
-            <h4 class="mt-60">Our services</h4>
-            <div class="row">
-                <div class="col-sm-6">
-                    <!-- Feature -->
-                    <div class="feature feature-1 animated" data-animation="fadeIn">
-                        <span class="icon icon-primary"><i class="li-camera"></i></span>
-                        <h5 class="mb-0">Photography</h5>
-                        <span class="text-sm text-muted">Working on you motivation skills</span>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <!-- Feature -->
-                    <div class="feature feature-1 animated" data-animation="fadeIn" data-animation-delay="300">
-                        <span class="icon icon-primary"><i class="li-theme"></i></span>
-                        <h5 class="mb-0">Design</h5>
-                        <span class="text-sm text-muted">Working on you motivation skills</span>
-                    </div>
-                </div>
-            </div>
-
-            <hr class="hidden-xs-down">
-            <div class="row">
-                <div class="col-sm-6">
-                    <!-- Feature -->
-                    <div class="feature feature-1 animated" data-animation="fadeIn">
-                        <span class="icon icon-primary"><i class="li-lecturer"></i></span>
-                        <h5 class="mb-0">Courses</h5>
-                        <span class="text-sm text-muted">Working on you motivation skills</span>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <!-- Feature -->
-                    <div class="feature feature-1 animated" data-animation="fadeIn" data-animation-delay="300">
-                        <span class="icon icon-primary"><i class="li-camera3"></i></span>
-                        <h5 class="mb-0">Video</h5>
-                        <span class="text-sm text-muted">Working on you motivation skills</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-    </div>
-
-</section>
-
-<!-- Section / portfolio -->
-<section id="portfolio" class="section"
-         ncweb-editablecollection="/portfolio">
-
-    <div class="container-fluid container-custom">
-        <h2 class="mb-50"
-            ncweb-contentpart="LatestWorks-Title">
-            Latest Works
-        </h2>
-        <!-- Filter -->
-        <nav class="mb-40">
-            <ul class="nav nav-pills filter-isotope mb-50 text-center" data-filter-list="#works-list">
-                <li class="nav-item active"><a href="#" class="nav-link" data-filter="*"><i class="pe-7s-folder"></i>All</a></li>
-                <li class="nav-item"><a href="#" class="nav-link" data-filter=".filter-one"><i class="pe-7s-graph1"></i>Design</a></li>
-            </ul>
-        </nav>
-    </div>
-    <div id="works-list" class="row masonry no-padding">
-
-        <div class="masonry-sizer col-lg-4 col-sm-6 col-xs-12"></div>
-
-
-        @foreach (var page in this.Model.ContentService.GetPagesUnder("/portfolio").OrderByDescending(p => p.Created))
-        {
-
-            <div class="masonry-item filter-one col-lg-4 col-sm-6 col-xs-12"
-                 ncweb-collectionitem itemid="@(page.Id)">
-                <!-- Image Box -->
-                <div class="image-box image-hover inner-title title-hover">
-                    <div class="image">
-                        <a href="@(page.Url)">
-                            <img src="assets/img/projects/project0@((page.Id % 9)+1).jpg" alt=""
-                                 ncweb-editableimage="images/portfolio/@(page.Id)/list.png">
-                        </a>
-                    </div>
-                    <div class="title text-xs-center">
-                        <a href="@(page.Url)">
-                            <h5 class="mb-0"
-                                ncweb-contentpart="Title">Title</h5>
-                            <p class="text-sm text-muted mb-0"
-                               ncweb-contentpart="Intro">Mental Coaching</p>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        }
-
-    </div>
-
-</section>
-
-<!-- Section / Latest Posts -->
-<section id="latest-posts" class="section"
-         ncweb-editablecollection="/blog">
-
-    <div class="container-fluid container-custom">
-        <h2 class="mb-50">Latest Posts <a href="/blog" class="ml-20 btn btn-secondary btn-sm animated" data-animation="fadeInRight">Go to Blog</a></h2>
-        <div class="carousel carousel-items" data-slick='{
-                "slidesToShow": 3,
-                "slidesToScroll": 1,
-                "responsive": [
-                    {
-                        "breakpoint": 991,
-                        "settings": {
-                            "slidesToShow": 2
-                        }
-                    },
-                    {
-                        "breakpoint": 575,
-                        "settings": {
-                            "slidesToShow": 1
-                        }
-                    }
-                ]
-            }'>
-
-            @foreach (var page in this.Model.ContentService.GetPagesUnder("/blog").OrderByDescending(p => p.Created))
-            {
-                <div class="carousel-item"
-                     ncweb-collectionitem itemid="@(page.Id)">
-                    <article class="post item">
-                        <div class="post-image">
-                            <img src="assets/img/posts/post0@((page.Id % 4)+1).jpg" alt=""
-                                 ncweb-editableimage="images/blog/@(page.Id)/list.png">
+                <div class="col-lg-7 offset-xl-2 offset-lg-1 anuphan"
+                     ncweb-contentpart="About">
+                    <h3 class="services-subtitle">
+                        From beginning ideas to individual integrity, rich identity from the line <span>on the paper to final projects.</span>
+                    </h3>
+                    <div class="services-items">
+                        <div class="services-item">
+                            <h4 class="services-item__title">Website Design</h4>
+                            <p class="services-item__descr">We make our customers ' products valuable in the eyes of customers. To do this, we analyze and study people, build long-term strategies f</p>
                         </div>
-                        <div class="post-content">
-                            <div class="date text-muted"
-                                 ncweb-itemdate="@(page.Created.ToUnixTimeMilliseconds())"
-                                 ncweb-itemdateformat="dd MMMM yyyy">
-                                @(page.Created.ToString("dd MMMM yyyy"))
+                        <div class="services-item">
+                            4
+                            <h4 class="services-item__title">Mobile app design</h4>
+                            <p class="services-item__descr">Mobile application development is a highlight that businesses are interested in at the moment and in the future.</p>
+                        </div>
+                        <div class="services-item">
+                            <h4 class="services-item__title">3D MODELING</h4>
+                            <p class="services-item__descr">We make our customers ' products valuable in the eyes of customers. To do this, we analyze and study people, build long-term strategies f</p>
+                        </div>
+                        <div class="services-item">
+                            <h4 class="services-item__title">BRANDING</h4>
+                            <p class="services-item__descr">We make our customers ' products valuable in the eyes of customers. To do this, we analyze and study people, build long-term strategies f</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section" id="projects">
+    <div class="projects section-inner"
+         ncweb-editablebackground="/images/layout/home-projects.png">
+        <div class="container section-cnt">
+            <div class="projects-list"
+                 ncweb-editablecollection="/portfolio">
+                <div class="content-marquee has-stopable">
+                    <div class="content-marquee__original">
+
+                        @foreach (var page in this.Model.ContentService.GetPagesUnder("/portfolio").OrderByDescending(p => p.Created))
+                        {
+                            <div class="projects-list__item"
+                                 ncweb-collectionitem itemid="@(page.Id)">
+                                <!-- Stroke text-->
+                                <div class="stroke-text vlt-stroke-text--lg">
+                                    <div class="projects-list__txt">
+
+                                        <img src="https://via.placeholder.com/300X150" alt=""
+                                             style="width: 300px"
+                                             ncweb-editableimage="images/portfolio/@(page.Id)/logo.png"
+                                             nocrop>
+
+                                        <a href="@(page.Url)">
+                                            @(page.Title)
+                                        </a>
+
+                                    </div>                                    
+                                </div>
                             </div>
-                            <h4>
-                                <a href="@(page.Url)" spaceissue
-                                   ncweb-contentpageid="@(page.Id)"
-                                   ncweb-contentpart="Title">
-                                    Road to success
-                                </a>
-                            </h4>
-                            <p ncweb-contentpageid="@(page.Id)"
-                               ncweb-contentpart="Intro"
-                               spaceissue>
-                                Molestie sit amet lectus non commodo. Praesent in dignissim lectus, eu suscipit diam. Donec vitae turpis dictum...
-                            </p>
-                            <a href="@(page.Url)" class="btn btn-primary btn-sm">
-                                Read more
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Latest news section. Seventh section-->
+<section class="section pp-scrollable" id="news">
+    <div class="news section-inner">
+        <div class="container section-cnt">
+            <div class="news-items row">
+
+
+                @foreach (var page in this.Model.ContentService.GetPagesUnder("/blog").OrderByDescending(p => p.Created))
+                {
+                    <div class="col-lg-4 news-item-wrap">
+                        <div class="news-item">
+                            <a class="news-link" href="@(page.Url)">
+                                <span class="news-item__img">
+                                    <img src="https://via.placeholder.com/390X355"
+                                         ncweb-editableimage="images/blog/@(page.Id)/list.png" alt="">
+                                </span>
+                                <span class="news-item__info">
+                                    <span class="news-item__info-date"
+                                          ncweb-itemdate="@(page.Created.ToUnixTimeMilliseconds())"
+                                          ncweb-itemdateformat="d MMMM yyyy">
+                                        @(page.Created.ToString("d MMMM yyyy"))
+                                    </span>
+                                    <span class="news-item__info-tag">
+
+                                    </span>
+                                </span>
+                                <span class="news-item__title anuphan">@(page.Title)</span>
                             </a>
                         </div>
-                        <ul class="post-meta">
-                            <li>
-                                <i class="li-feedback"></i>
-                                - feedback
-                            </li>
-                        </ul>
-                    </article>
-                </div>
-            }
-        </div>
-    </div>
+                    </div>
+                }
 
-</section>
-
-
-<!-- Section / Prices -->
-<section id="prices" class="section">
-
-    <!-- BG Image -->
-    <div class="bg-image"
-         ncweb-editablebackground="/images/home/pricing.png"
-         style="background-image: url('assets/img/photos/photograph_bg02.jpg')"></div>
-
-    <div class="container-fluid container-custom"
-         ncweb-contentpart="Pricing">
-        <h2 class="mb-50 text-xs-center dark">Prices</h2>
-        <div class="row">
-            <div class="col-md-4">
-                <!-- Price Table -->
-                <div class="price-table">
-                    <div class="head">
-                        <h4 class="title">Basic</h4>
-                        <span class="caption text-muted">Dedicated for small businesses</span>
-                    </div>
-                    <div class="price">
-                        <span class="currency text-primary">$</span>
-                        <span class="value text-primary">49</span>
-                        <span class="caption text-muted">/ per month</span>
-                    </div>
-                    <div class="content">
-                        <ul class="list-unstyled mb-0">
-                            <li>Self-employed</li>
-                            <li><strong>1-20</strong> invoices per month</li>
-                            <li>Free Consultations</li>
-                        </ul>
-                    </div>
-                    <button class="btn-bottom btn-dark">Buy it</button>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <!-- Price Table -->
-                <div class="price-table">
-                    <div class="head">
-                        <h4 class="title">Extended</h4>
-                        <span class="caption text-muted">Dedicated for small businesses</span>
-                    </div>
-                    <div class="price">
-                        <span class="currency text-primary">$</span>
-                        <span class="value text-primary">99</span>
-                        <span class="caption text-muted">/ per month</span>
-                    </div>
-                    <div class="content">
-                        <ul class="list-unstyled mb-0">
-                            <li>Self-employed</li>
-                            <li><strong>1-20</strong> invoices per month</li>
-                            <li>Depreciation of fixed assets</li>
-                            <li>Free Consultations</li>
-                        </ul>
-                    </div>
-                    <button class="btn-bottom btn-primary">Buy it</button>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <!-- Price Table -->
-                <div class="price-table">
-                    <div class="head">
-                        <h4 class="title">Pro</h4>
-                        <span class="caption text-muted">Dedicated for small businesses</span>
-                    </div>
-                    <div class="price">
-                        <span class="currency text-primary">$</span>
-                        <span class="value text-primary">199</span>
-                        <span class="caption text-muted">/ per month</span>
-                    </div>
-                    <div class="content">
-                        <ul class="list-unstyled mb-0">
-                            <li>Self-employed</li>
-                            <li><strong>1-20</strong> invoices per month</li>
-                            <li>Depreciation of fixed assets</li>
-                            <li>Free Consultations</li>
-                            <li>24/7 Support</li>
-                        </ul>
-                    </div>
-                    <button class="btn-bottom btn-dark">Buy it</button>
-                </div>
             </div>
         </div>
     </div>
-
 </section>
-
-<!-- Section / Contact -->
-<section id="contact" class="section min-fullheight">
-
-    <!-- BG Image -->
-    <div id="google-map" class="bg-map" data-latitude="40.758895" data-longitude="-73.985131" data-style="light"></div>
-
-    <div class="container-fluid container-custom">
-        <h2 class="mb-50 text-xs-center">Contact</h2>
-    </div>
-    <div class="container container-md">
-        <div class="contact-box animated" data-animation="fadeInUp">
-            <div class="row no-padding">
-                <div class="col-md-5">
-                    <div class="box left"
-                         ncweb-contentpart="contact">
-                        <h4>ติดต่อเรา</h4>
-                        <ul class="contact-list">
-                            <li>
-                                <i class="li-email"></i>
-                                <div class="content">
-                                    <span class="text-xs text-muted">E-mail:</span>
-                                    <a href="mailto:hello@nant.co" class="text-lg">hello@nant.co</a>
-                                </div>
-                            </li>
-                            <li>
-                                <i class="li-push"></i>
-                                <div class="content">
-                                    <span class="text-xs text-muted">Phone:</span>
-                                    <a href="tel:+66982591133">+66 <span class="text-lg">98 259 1133</span></a>
-                                </div>
-                            </li>
-                            <li>
-                                <i class="li-map1"></i>
-                                <div class="content">
-                                    <span class="text-xs text-muted">Address:</span>
-                                    <a href="tel:+66982591133">8/44 พรีเมี่ยมเพลส ถ. เทพรักษ์</span></a>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-7">
-                    <div class="box right">
-                        <h4>ให้เราติดต่อกลับ</h4>
-                        <form action="#">
-                            <div class="form-group">
-                                <label>อีเมลล์ของคุณ</label>
-                                <input name="email" type="email" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label>ข้อความของคุณ</label>
-                                <textarea name="message" id="message" cols="30" rows="5" class="form-control"></textarea>
-                            </div>
-                            <div class="form-group form-submit">
-                                <button type="submit" class="btn btn-submit">
-                                    <span>ส่ง</span>
-                                    <svg class="loader loader-white" width="32px" height="32px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle class="circle" fill="none" stroke-width="2" stroke-linecap="round" cx="16" cy="16" r="14"></circle></svg>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-</section>
-
