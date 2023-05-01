@@ -12,7 +12,7 @@ namespace NC.WebEngine.Core.Editor
     {
         public void Process(ContentRenderModel renderModel, HtmlDocument document)
         {
-            var matchingElement = document.DocumentNode.QuerySelectorAll($"img[ncweb-editableimage]");
+            var matchingElement = document.DocumentNode.QuerySelectorAll($"[ncweb-editableimage]");
 
             foreach ( var element in matchingElement )
             {
@@ -31,7 +31,15 @@ namespace NC.WebEngine.Core.Editor
                     continue;
                 }
 
-                element.SetAttributeValue("src", "/" + file);
+                if (element.Name == "img")
+                {
+                    element.SetAttributeValue("src", "/" + file);
+                }
+                else
+                {
+                    var img = element.QuerySelector("img[ncweb-editableimage-placeholder]");
+                    img?.SetAttributeValue("src", "/" + file);
+                }
             }
 
         }

@@ -68,7 +68,7 @@ namespace NC.WebEngine.Core.Content.PostProcessors
             if ( renderModel.VueModel != null )
             {
                 var body = document.DocumentNode.QuerySelector("body");
-                body.AppendChild(HtmlNode.CreateNode("<script src=\"/js/vue/vue.global.min.js\"></script>"));
+                body.AppendChild(HtmlNode.CreateNode("<script src=\"/js/vue/vue.global.prod.min.js\"></script>"));
                 body.SetAttributeValue("id", "ncwapp");
 
                 body.AppendChild(HtmlNode.CreateNode("<script src=\"/js/ncweb/vuesync.js\"></script>"));

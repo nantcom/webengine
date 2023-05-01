@@ -47,6 +47,15 @@ namespace NC.WebEngine
 
             foreach (var module in modules)
             {
+                if (typeof(IService).IsAssignableFrom(module))
+                {
+                    // try to use same instance if the type is both IService and IModule
+                    var moduleInstance = (IModule)app.Services.GetService(module);
+                    moduleInstance!.Register(app);
+
+                    continue;
+                }
+
                 var instance = (IModule?)Activator.CreateInstance(module);
                 instance!.Register(app);
             }
@@ -54,13 +63,13 @@ namespace NC.WebEngine
 
         private static void RegisterBuilder(WebApplicationBuilder builder)
         {
-            var modules = Assembly.GetExecutingAssembly()
+            var services = Assembly.GetExecutingAssembly()
                             .GetTypes()
                             .Where(t => typeof(IService).IsAssignableFrom(t) && t != typeof(IService));
 
-            foreach (var module in modules)
+            foreach (var service in services)
             {
-                var instance = (IService?)Activator.CreateInstance(module);
+                var instance = (IService?)Activator.CreateInstance(service);
                 instance!.RegisterBuilder(builder);
             }
         }

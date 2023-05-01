@@ -68,10 +68,21 @@ public class LoginModule : IModule
 
         this.OpenIdSettings = ReadConfiguration(this.AzureADB2C).Result;
 
+        var localHostAdmin = new ClaimsPrincipal();
+        localHostAdmin.AddIdentity(new ClaimsIdentity(new[] { new Claim("roles", "Admin") }));
+        localHostAdmin.AddIdentity(new ClaimsIdentity(new[] { new Claim(ClaimTypes.Role, "Admin") }));
+        localHostAdmin.AddIdentity(new ClaimsIdentity(new[] { new Claim("name", "LocalHostAdmin") }));
+
         app.Use((htx, next) =>
         {
             if (htx.Request.Headers.Accept.Any(s => s.Contains("text/html") || s.Contains("application/json")) == false)
             {
+                return next(htx);
+            }
+
+            if (htx.Request.Host.Host == "localhost" && htx.Request.Query.ContainsKey("noeditor") == false)
+            {
+                htx.User = localHostAdmin;
                 return next(htx);
             }
 

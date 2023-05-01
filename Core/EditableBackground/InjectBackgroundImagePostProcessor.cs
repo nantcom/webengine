@@ -31,8 +31,8 @@ namespace NC.WebEngine.Core.EditableBackground
                 }
 
                 string oldStyle = element.GetAttributeValue("style", "");
-                                
-                var styleDict = oldStyle.Split(";").Select( item =>
+
+                var styleDict = oldStyle.Split(";", StringSplitOptions.RemoveEmptyEntries).Select( item =>
                 {
                     var parts = item.Split(':', StringSplitOptions.RemoveEmptyEntries);
                     return new
@@ -42,9 +42,17 @@ namespace NC.WebEngine.Core.EditableBackground
                     };
                 }).ToDictionary( item => item.Key, item => item.Value);
 
-                styleDict["background-image"] = $"url('{file}')";
+                styleDict["background-image"] = $"url('/{file}')";
 
                 element.SetAttributeValue("style", string.Join(';', styleDict.Select( pair => $"{pair.Key}:{pair.Value}")));
+
+                var placeholders = element.QuerySelectorAll("img[ncweb-editablebackground-placeholder]");
+                foreach ( var placeholder in placeholders )
+                {
+                    placeholder.SetAttributeValue("src", "/" + file);
+                }
+
+
             }
 
         }

@@ -50,48 +50,43 @@ window.nceditableimage.mixin = function (vueModelInstance, pageId) {
         $input.appendTo('body');
 
 
-        $("img[ncweb-editableimage]").each(function () {
+        $("[ncweb-editableimage]").each(function () {
             
             var $me = $(this);
             var img = this;
 
-            $me.click(function () {
+            if (img.tagName != "IMG") {
+
+                var img = $me.find("img[ncweb-editableimage-placeholder]").first();
+                if (img.length != 1) {
+                    console.log("Skipping editable image becase no placeholder is found or more than one placeholder specified");
+                    return;
+                }
+
+                img = img[0];
+            }
+
+            $me.click(function (event) {
+
+                event.stopPropagation();
+                event.preventDefault();
 
                 var oldWidth = $me.width();
                 var oldHeight = $me.height();
 
                 $croppieArea.html('<button></button><div><img id="nceditableimage_tocrop"></div>');
 
-                $input[0].onchange = async function () {
+                if ($me.attr("nocrop") != null) {
 
-                    const clickFile = this.files[0];
-                    if (clickFile == null) {
-                        return;
-                    }
+                    $input[0].onchange = async function () {
 
-                    const uploaded = await readFileAsync(clickFile);
-                    $("#nceditableimage_croppie").addClass("show");
-                    $("#nceditableimage_tocrop").attr("src", uploaded);
-
-                    $("#nceditableimage_tocrop").croppie({
-                        enableExif: true,
-                        viewport: {
-                            width: oldWidth,
-                            height: oldHeight,
-                            type: 'square'
-                        },
-                        boundary: {
-                            width: oldWidth + 100,
-                            height: oldHeight + 100
+                        const clickFile = this.files[0];
+                        if (clickFile == null) {
+                            return;
                         }
-                    });
-
-                    $croppieArea.find('button').click(async function () {
-
-                        var resultBlob = await $("#nceditableimage_tocrop").croppie( 'result', 'blob', {oldWidth, oldHeight});
 
                         const formData = new FormData();
-                        formData.append('file', resultBlob);
+                        formData.append('file', clickFile);
                         formData.append('target', $me.attr("ncweb-editableimage"));
 
                         const options = {
@@ -111,13 +106,72 @@ window.nceditableimage.mixin = function (vueModelInstance, pageId) {
                             next();
                         });
 
-                        $croppieArea.removeClass("show");
-                        $croppieArea.html("");
-
-                        var final = await readFileAsync(resultBlob);
+                        var final = await readFileAsync(clickFile);
                         img.src = final;
-                    });
-                };
+
+                    };
+
+                }
+                else {
+
+                    $input[0].onchange = async function () {
+
+                        const clickFile = this.files[0];
+                        if (clickFile == null) {
+                            return;
+                        }
+
+                        const uploaded = await readFileAsync(clickFile);
+                        $("#nceditableimage_croppie").addClass("show");
+                        $("#nceditableimage_tocrop").attr("src", uploaded);
+
+                        $("#nceditableimage_tocrop").croppie({
+                            enableExif: true,
+                            viewport: {
+                                width: oldWidth,
+                                height: oldHeight,
+                                type: 'square'
+                            },
+                            boundary: {
+                                width: oldWidth + 100,
+                                height: oldHeight + 100
+                            }
+                        });
+
+                        $croppieArea.find('button').click(async function () {
+
+                            var resultBlob = await $("#nceditableimage_tocrop").croppie('result', 'blob', { oldWidth, oldHeight });
+
+                            const formData = new FormData();
+                            formData.append('file', resultBlob);
+                            formData.append('target', $me.attr("ncweb-editableimage"));
+
+                            const options = {
+                                method: 'POST',
+                                body: formData,
+                            };
+
+                            try {
+                                await fetch('/__editableimage/upload', options);
+                            }
+                            catch {
+
+                            }
+
+                            $savedCheck.addClass("show").delay(2000).queue(function (next) {
+                                $(this).removeClass('show');
+                                next();
+                            });
+
+                            $croppieArea.removeClass("show");
+                            $croppieArea.html("");
+
+                            var final = await readFileAsync(resultBlob);
+                            img.src = final;
+                        });
+                    };
+
+                }
 
                 $input.click();
 

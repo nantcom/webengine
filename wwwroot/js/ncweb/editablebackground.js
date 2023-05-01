@@ -45,7 +45,7 @@ window.nceditablebackground.mixin = function (vueModelInstance, pageId) {
                         }
 
                         count++;
-                        $me.css("background-image", `url('${$me.attr("ncweb-editablebackground")}?${count}')`);
+                        $me.css("background-image", `url(/'${$me.attr("ncweb-editablebackground")}?${count}')`);
                     };
 
                     $input.click();

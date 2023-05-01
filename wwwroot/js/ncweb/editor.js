@@ -77,6 +77,10 @@ window.nceditor.editormixin = function (vueModelInstance, pageId) {
                     })
                 }
 
+                element.addEventListener('keydown', function (event) {
+                    event.stopPropagation();
+                });
+
                 var saveButton = $('<div class="ncweb_floatingbutton save">');
                 var cancelButton = $('<div class="ncweb_floatingbutton cancel">');
 

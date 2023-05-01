@@ -109,6 +109,7 @@ div.ncweb_floatingbutton.hide {
   right: 10px;
   top: 10px;
   display: flex;
+  z-index: 99999;
 }
 #ncweb_toolbar > * {
   margin-right: 10px;

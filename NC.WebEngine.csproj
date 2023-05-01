@@ -21,6 +21,7 @@
 		</PackageReference>
 		<PackageReference Include="Razor.Templating.Core" Version="1.8.0" />
 		<PackageReference Include="RestSharp" Version="110.2.0" />
+		<PackageReference Include="SkiaSharp" Version="2.88.3" />
 		<PackageReference Include="Slugify.Core" Version="4.0.1" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.29.0" />
 	</ItemGroup>
@@ -32,10 +33,6 @@
 	<ItemGroup>
 		<!-- Exclude the output of source generators from the compilation -->
 		<Compile Remove="$(CompilerGeneratedFilesOutputPath)/**/*.cs" />
-		<Compile Remove="Views\NewFolder\**" />
-		<Content Remove="Views\NewFolder\**" />
-		<EmbeddedResource Remove="Views\NewFolder\**" />
-		<None Remove="Views\NewFolder\**" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Content Remove="compilerconfig.json" />
@@ -49,6 +46,7 @@
 	<ItemGroup>
 	  <Folder Include="wwwroot\images\" />
 	  <Folder Include="wwwroot\js\editor-js\" />
+	  <Folder Include="wwwroot\js\learn\" />
 	</ItemGroup>
 
 </Project>

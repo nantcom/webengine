@@ -147,19 +147,37 @@ namespace NC.WebEngine.Core.Content
 
             var parts = _db.Connection.LinqTo<ContentPart>()
                             .Where(cp => cp.ContentPageId == pageToRender.Id)
-                            .Result();
+                            .Result()
+                            .ToList();
 
-            var latestParts = from part in parts
-                            orderby part.Created descending
-                            group part by part.Name into g
-                            select g.First();
+            IEnumerable<ContentPart> latestParts;
+
+            if (ctx.Request.Query.ContainsKey("history") == false)
+            {
+                latestParts = from part in parts
+                              orderby part.Created descending
+                              group part by part.Name into g
+                              select g.First();
+            }
+            else
+            {
+                DateTime after = DateTime.MinValue;
+                DateTime.TryParse(ctx.Request.Query["history"].ToString(), out after);
+
+                latestParts = from part in parts
+                              orderby part.Created descending
+                              group part by part.Name into g
+                              let olderVersion = g.Where( p => p.Created <= after ).FirstOrDefault()
+                              let latestVersion = g.First()
+                              select olderVersion ?? latestVersion;
+            }
 
 
             return new ContentRenderModel()
             {
                 SiteTitle = this.SiteTitle,
                 ContentPage = pageToRender,
-                ContentPartHistory = parts.ToList(),
+                ContentPartHistory = parts,
                 ContentParts = latestParts.ToDictionary( p => p.Name ),
                 VueModel = vueModelInstance,
                 HttpContext = ctx,
@@ -207,6 +225,11 @@ namespace NC.WebEngine.Core.Content
             if (p.ContentPageId == 0)
             {
                 throw new InvalidOperationException("Require ContentPageId");
+            }
+
+            if (p.Id == 0)
+            {
+                p.Created = DateTime.Now;
             }
 
             _db!.Connection.Upsert( p );
